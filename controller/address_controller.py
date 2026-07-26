@@ -14,12 +14,11 @@ def list_addresses():
     return jsonify(addresses), 200
 
 
-@address_bp.route('/<int:address_id>', methods=['GET'])
-def get_address(address_id):
-    address = service.get_address_by_id(address_id)
-    if not address:
-        return jsonify({'error': 'endereço não encontrado'}), 404
-    return jsonify(address), 200
+@address_bp.route('/state/<state>/city/<city>', methods=['GET'])
+def get_addresses_by_state_and_city(state, city):
+    addresses = service.get_addresses_by_state_and_city(state, city)
+    return jsonify(addresses), 200
+
 
 
 @address_bp.route('', methods=['POST'])

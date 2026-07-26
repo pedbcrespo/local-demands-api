@@ -6,11 +6,11 @@ class ResidentService:
     def __init__(self, resident_repository: ResidentRepository) -> None:
         self.resident_repository = resident_repository
 
-    def get(self, resident_id: int) -> dict | None:
-        return self.resident_repository.get(resident_id)
+    def get_by_cpf(self, cpf: str) -> dict | None:
+        return self.resident_repository.get_by_cpf(cpf)
 
-    def get_by_name(self, name: str) -> list[dict]:
-        return self.resident_repository.get_by_name(name)
+    def get_all(self) -> list[dict]:
+        return self.resident_repository.get_all()
 
     def create(self, resident_data: Resident) -> dict:
         return self.resident_repository.create(resident_data)

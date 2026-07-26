@@ -7,10 +7,19 @@ class AddressRepository:
         return [a.to_dict() for a in Address.query.all()]
 
     def get(self, address_id: int) -> dict | None:
+        if not address_id:
+            return None
         address = db.session.get(Address, address_id)
         return address.to_dict() if address else None
 
-    def create(self, address: Address) -> dict:
+    def get_by_address(self, address: Address) -> list[Address]:
+        if not address:
+            return []
+        return [a.to_dict() for a in Address.query.filter_by(street=address.street, city=address.city, state=address.state).all()]
+
+    def create(self, address: Address) -> dict | None:
+        if not address:
+            return None
         existing_address = Address.query.filter_by(street=address.street, city=address.city, state=address.state).first()
         if existing_address:
             return existing_address.to_dict()

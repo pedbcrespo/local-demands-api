@@ -10,8 +10,9 @@ class ResidentRepository:
         resident = db.session.get(Resident, resident_id)
         return resident.to_dict() if resident else None
 
-    def get_by_name(self, full_name: str) -> list[Resident]:
-        return [r.to_dict() for r in Resident.query.filter_by(full_name=full_name).all()]
+    def get_by_cpf(self, cpf: str) -> dict | None:
+        resident = Resident.query.filter_by(cpf=cpf).first()
+        return resident.to_dict() if resident else None
 
     def create(self, resident: Resident) -> dict:
         existing_resident = Resident.query.filter_by(full_name=resident.full_name, phone=resident.phone, address_id=resident.address_id).first()
