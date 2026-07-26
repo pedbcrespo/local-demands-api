@@ -1,4 +1,4 @@
-# local-demands
+# local-demands-api
 
 ## Ideia do projeto:
 Consiste em uma API que registra problemas locais de uma determinada cidade.
