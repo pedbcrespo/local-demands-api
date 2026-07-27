@@ -1,5 +1,5 @@
 from config.db_config import db
-from model.address import Address
+
 
 class Resident(db.Model):
     __tablename__ = 'resident'
@@ -9,14 +9,23 @@ class Resident(db.Model):
     cpf = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(255), nullable=False)
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
+    association_id = db.Column(db.Integer, db.ForeignKey('association.id'), nullable=True)
+    type = db.Column(db.String(50))
 
     address = db.relationship('Address', lazy='joined')
+    association = db.relationship('Association', back_populates='residents', lazy='joined')
 
-    def __init__(self, full_name: str, cpf: str, phone: str, address_id: int):
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'resident',
+    }
+
+    def __init__(self, full_name: str, cpf: str, phone: str, address_id: int, association_id: int = None):
         self.full_name = full_name
         self.cpf = cpf
         self.phone = phone
         self.address_id = address_id
+        self.association_id = association_id
 
     def to_dict(self):
         return {
@@ -24,5 +33,7 @@ class Resident(db.Model):
             'full_name': self.full_name,
             'cpf': self.cpf,
             'phone': self.phone,
+            'type': self.type,
             'address': self.address.to_dict() if self.address else None,
+            'association_id': self.association_id,
         }
