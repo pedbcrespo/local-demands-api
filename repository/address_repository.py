@@ -1,29 +1,29 @@
 from config.db_config import db
+from model import address
 from model.address import Address
 
 
 class AddressRepository:
-    def get_all(self) -> list[Address]:
-        return [a.to_dict() for a in Address.query.all()]
-
-    def get(self, address_id: int) -> dict | None:
-        if not address_id:
-            return None
-        address = db.session.get(Address, address_id)
-        return address.to_dict() if address else None
-
-    def get_states(self) -> list[str]:
-        return [a.state for a in Address.query.distinct(Address.state).all()]
-
-    def get_cities_by_state(self, state: str) -> list[str]:
-        if not state:
-            return []
-        return [a.city for a in Address.query.filter_by(state=state).distinct(Address.city).all()]
-
-    def get_by_address(self, address: Address) -> list[Address]:
+    def get_by_address(self, address: Address) -> list:
         if not address:
             return []
-        return [a.to_dict() for a in Address.query.filter_by(street=address.street, city=address.city, state=address.state).all()]
+        filters = []
+        filter_cases = [
+            {'case': lambda add: add.id, 'filter': lambda add: Address.id == add.id},
+            {'case': lambda add: add.street, 'filter': lambda add: Address.street.ilike(f'%{add.street}%')},
+            {'case': lambda add: add.district, 'filter': lambda add: Address.district.ilike(f'%{add.district}%')},
+            {'case': lambda add: add.city, 'filter': lambda add: Address.city.ilike(f'%{add.city}%')},
+            {'case': lambda add: add.state, 'filter': lambda add: Address.state.ilike(f'%{add.state}%')},
+        ]
+
+        for case in filter_cases:
+            if case['case'](address):
+                filters.append(case['filter'](address))
+    
+        if not filters:
+            return []
+        
+        return [a.to_dict() for a in Address.query.filter(db.or_(*filters)).distinct().all()]
 
     def create(self, address: Address) -> dict | None:
         if not address:

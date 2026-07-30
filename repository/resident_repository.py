@@ -3,33 +3,26 @@ from model.resident import Resident
 
 
 class ResidentRepository:
-    def get_all(self) -> list[Resident]:
-        return [r.to_dict() for r in Resident.query.all()]
-
-    def get(self, resident_id: int) -> dict | None:
-        resident = db.session.get(Resident, resident_id)
-        return resident.to_dict() if resident else None
-
-    def get_by_cpf(self, cpf: str) -> dict | None:
+    def get_by_cpf(self, cpf: str) -> Resident | None:
         resident = Resident.query.filter_by(cpf=cpf).first()
-        return resident.to_dict() if resident else None
+        return resident
 
-    def create(self, resident: Resident) -> dict:
+    def create(self, resident: Resident) -> Resident | None:
         existing_resident = Resident.query.filter_by(full_name=resident.full_name, phone=resident.phone, address_id=resident.address_id).first()
         if existing_resident:
-            return existing_resident.to_dict()
+            return existing_resident
         db.session.add(resident)
         db.session.commit()
-        return resident.to_dict()
+        return resident
 
-    def update(self, resident_id: int, data: Resident) -> dict | None:
+    def update(self, resident_id: int, data: Resident) -> Resident | None:
         resident = db.session.get(Resident, resident_id)
         if not resident:
             return None
         resident.full_name = data.get('full_name', resident.full_name)
         resident.phone = data.get('phone', resident.phone)
         db.session.commit()
-        return resident.to_dict()
+        return resident
 
     def delete(self, resident_id: int) -> bool:
         resident = db.session.get(Resident, resident_id)

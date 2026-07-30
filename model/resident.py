@@ -29,11 +29,9 @@ class Resident(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'full_name': self.full_name,
             'cpf': self.cpf,
+            'full_name': self.full_name,
             'phone': self.phone,
-            'type': self.type,
             'address': self.address.to_dict() if self.address else None,
-            'association_id': self.association_id,
+            'association': self.association.name if self.association else None,
         }

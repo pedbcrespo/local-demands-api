@@ -6,26 +6,22 @@ class AddressService:
     def __init__(self, address_repository: AddressRepository):
         self.address_repository = address_repository
 
-    def get_all(self) -> list[Address]:
-        return self.address_repository.get_all()
+    def get_cities_by_state(self, state: str) -> list[dict]:
+        if not state:
+            return []
+        address = Address(state=state)
+        return [add.to_dict() for add in self.address_repository.get_by_address(address)]
 
-    def get(self, address_id: int) -> Address | None:
-        return self.address_repository.get(address_id)
-
-    def get_states(self) -> list[str]:
-        return self.address_repository.get_states()
-
-    def get_addresses_by_state_and_city(self, state: str, city: str) -> list[Address]:
+    def get_addresses_by_state_and_city(self, state: str, city: str) -> list[dict]:
         if not state or not city:
             return []
         address = Address(state=state, city=city)
-        return self.address_repository.get_by_address(address)
+        return [add.to_dict() for add in self.address_repository.get_by_address(address)]
 
-    def create(self, address_data: Address) -> Address | None:
-        return self.address_repository.create(address_data)
-
-    def update(self, address_id: int, address_data: Address) -> Address | None:
-        return self.address_repository.update(address_id, address_data)
+    def create(self, address_data: Address) -> dict | None:
+        saved_address = self.address_repository.create(address_data)
+        return saved_address.to_dict() if saved_address else None
 
     def delete(self, address_id: int) -> bool:
-        return self.address_repository.delete(address_id)
+        is_deleted = self.address_repository.delete(address_id)
+        return is_deleted
