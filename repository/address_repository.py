@@ -12,6 +12,14 @@ class AddressRepository:
         address = db.session.get(Address, address_id)
         return address.to_dict() if address else None
 
+    def get_states(self) -> list[str]:
+        return [a.state for a in Address.query.distinct(Address.state).all()]
+
+    def get_cities_by_state(self, state: str) -> list[str]:
+        if not state:
+            return []
+        return [a.city for a in Address.query.filter_by(state=state).distinct(Address.city).all()]
+
     def get_by_address(self, address: Address) -> list[Address]:
         if not address:
             return []

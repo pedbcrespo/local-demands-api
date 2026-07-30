@@ -12,6 +12,9 @@ class AddressService:
     def get(self, address_id: int) -> Address | None:
         return self.address_repository.get(address_id)
 
+    def get_states(self) -> list[str]:
+        return self.address_repository.get_states()
+
     def get_addresses_by_state_and_city(self, state: str, city: str) -> list[Address]:
         if not state or not city:
             return []

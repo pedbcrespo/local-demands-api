@@ -13,12 +13,15 @@ def list_addresses():
     addresses = service.get_all()
     return jsonify(addresses), 200
 
+@address_bp.route('/state', methods=['GET'])
+def get_states():
+    states = service.get_states()
+    return jsonify(states), 200
 
 @address_bp.route('/state/<state>/city/<city>', methods=['GET'])
-def get_addresses_by_state_and_city(state, city):
+def get_addresses_by_state_and_city(state: str, city: str):
     addresses = service.get_addresses_by_state_and_city(state, city)
     return jsonify(addresses), 200
-
 
 
 @address_bp.route('', methods=['POST'])
