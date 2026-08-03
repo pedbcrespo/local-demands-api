@@ -1,7 +1,5 @@
 from config.db_config import db
-from model import address
 from model.address import Address
-
 
 class AddressRepository:
     def get_by_address(self, address: Address) -> list:
