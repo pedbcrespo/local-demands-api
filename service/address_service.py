@@ -1,4 +1,5 @@
 
+from model.request.address_request import AddressRequest
 from repository.address_repository import AddressRepository
 from model.address import Address
 
@@ -18,10 +19,22 @@ class AddressService:
         address = Address(state=state, city=city)
         return [add.to_dict() for add in self.address_repository.get_by_address(address)]
 
-    def create(self, address_data: Address) -> dict | None:
-        saved_address = self.address_repository.create(address_data)
+    def create(self, address_data: AddressRequest) -> dict | None:
+        address = Address(
+            street=address_data.street,
+            district=address_data.district,
+            city=address_data.city,
+            state=address_data.state
+        )
+        if self.__verify_existing_address(address):
+            return None
+        saved_address = self.address_repository.create(address)
         return saved_address.to_dict() if saved_address else None
 
     def delete(self, address_id: int) -> bool:
         is_deleted = self.address_repository.delete(address_id)
         return is_deleted
+
+    def __verify_existing_address(self, address: Address) -> bool:
+        existing_address = self.address_repository.get_by_address(address)
+        return existing_address != None and len(existing_address) > 0

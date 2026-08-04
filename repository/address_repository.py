@@ -2,7 +2,7 @@ from config.db_config import db
 from model.address import Address
 
 class AddressRepository:
-    def get_by_address(self, address: Address) -> list:
+    def get_by_address(self, address: Address) -> list[Address]:
         if not address:
             return []
         filters = []
@@ -21,7 +21,7 @@ class AddressRepository:
         if not filters:
             return []
         
-        return [a.to_dict() for a in Address.query.filter(db.or_(*filters)).distinct().all()]
+        return [address for address in Address.query.filter(db.or_(*filters)).distinct().all()]
 
     def create(self, address: Address) -> dict | None:
         if not address:

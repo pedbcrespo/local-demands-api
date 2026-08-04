@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from model.request.address_request import AddressRequest
 from service.address_service import AddressService
 from repository.address_repository import AddressRepository
 from config.const_config import BASE_URL
@@ -18,11 +19,12 @@ def get_addresses_by_state_and_city(state: str, city: str):
     return jsonify(addresses), 200
 
 @address_bp.route('', methods=['POST'])
-def create_address():
+def create():
     data = request.get_json(silent=True)
-    if not data:
+    address_request = AddressRequest.from_dict(data)
+    if not address_request:
         return jsonify({'error': 'JSON inválido'}), 400
-    address = service.create_address(data)
+    address = service.create(address_request)
     return jsonify(address), 201
 
 @address_bp.route('/<int:address_id>', methods=['DELETE'])
