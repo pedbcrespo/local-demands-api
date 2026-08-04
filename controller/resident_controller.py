@@ -10,6 +10,15 @@ resident_bp = Blueprint('residentservice = ResidentService(ResidentRepository())
 
 service = ResidentService(ResidentRepository())
 
+@resident_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    cpf = data.get('cpf')
+    resident = service.get_by_cpf(cpf)
+    if not resident:
+        return jsonify({'error': 'Resident not found'}), 404
+    return jsonify(resident), 200
+
 @resident_bp.route('', methods=['POST'])
 def create():
     data = request.get_json()

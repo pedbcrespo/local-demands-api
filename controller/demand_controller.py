@@ -23,4 +23,4 @@ def create():
     demand = service.create(demand_request)
     if not demand:
         return jsonify({'error': 'Failed to create demand'}), 400
-    return jsonify(demand), 201
+    return jsonify(demand), 200
