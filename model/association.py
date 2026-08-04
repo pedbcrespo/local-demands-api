@@ -17,8 +17,13 @@ class Association(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
             'name': self.name,
             'address': self.address.to_dict() if self.address else None,
-            'manager': self.manager.to_dict() if self.manager else None,
+            'manager': self.manager.full_name if self.manager else None,
+            'residents': self.__get_residents()
         }
+
+
+    def __get_residents(self):
+        filtered_residents = [resident for resident in self.residents if resident.id != self.manager.id]
+        return filtered_residents
