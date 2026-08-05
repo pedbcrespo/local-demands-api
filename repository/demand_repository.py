@@ -1,6 +1,7 @@
 from config.db_config import db
 from model.demand import Demand
 from model.address import Address
+from model.enums.status import Status
 
 class DemandRepository:
     def get_all(self) -> list[Demand]:
@@ -34,6 +35,14 @@ class DemandRepository:
         demand.status = data.status
         db.session.commit()
         return demand
+
+    def finish(demand_id: int) -> bool:
+        demand = db.session.get(Demand, demand_id)
+        if not demand:
+            return False
+        demand.status = Status.FINISHED
+        db.session.commit()
+        return True
 
     def delete(self, demand_id: int) -> bool:
         demand = db.session.get(Demand, demand_id)
