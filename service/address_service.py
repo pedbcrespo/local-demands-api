@@ -1,12 +1,13 @@
 
-from model.request.address_request import AddressRequest
-from repository.address_repository import AddressRepository
-from model.address import Address
+from model.request import AddressRequest
+from repository import AddressRepository, DemandRepository
+from model import Address
 from model.enums import State
 
 class AddressService:
-    def __init__(self, address_repository: AddressRepository):
+    def __init__(self, address_repository: AddressRepository, demand_repository: DemandRepository):
         self.address_repository = address_repository
+        self.demand_repository = demand_repository
 
     def get_states(self):
         return State.get_state_codes()
@@ -42,9 +43,16 @@ class AddressService:
         return saved_address.to_dict() if saved_address else None
 
     def delete(self, address_id: int) -> bool:
+        if self.__is_used_address(address_id):
+            return False
         is_deleted = self.address_repository.delete(address_id)
         return is_deleted
 
     def __verify_existing_address(self, address: Address) -> bool:
         existing_address = self.address_repository.get_by_address(address)
         return existing_address != None and len(existing_address) > 0
+
+    def __is_used_address(self, address_id: int) -> bool:
+        address_list = self.demand_repository.get_by_address_id(address_id)
+        return len(address_list) > 0
+

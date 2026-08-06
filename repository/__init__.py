@@ -1,1 +1,4 @@
 from .address_repository import AddressRepository
+from .demand_repository import DemandRepository
+from .resident_repository import ResidentRepository
+from .manager_repository import ManagerRepository

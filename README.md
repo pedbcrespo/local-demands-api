@@ -21,4 +21,4 @@ Considere o cenario onde em cidades há em um mesmo bairro, diferentes associaç
 * [ ] Uma vez marcada como FINALIZADA, não pode ser mais alterada
 
 ### Endereços
-* [ ] O registro de endereços é sempre publico
+* [x] O registro de endereços é sempre publico
