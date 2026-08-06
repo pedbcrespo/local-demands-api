@@ -1,6 +1,6 @@
 from config.const_config import SECRET_KEY
 from model.resident import Resident
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import jwt
 
 class TokenService:
@@ -9,7 +9,7 @@ class TokenService:
         payload = {
             'id': resident.id,
             'type': resident.type,
-            'exp': datetime.utcnow() + timedelta(hours=8)
+            'exp': datetime.now(timezone.utc) + timedelta(hours=8)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         return token
