@@ -10,7 +10,7 @@ class Manager(Resident):
     start = db.Column(db.Date, nullable=False, default=date.today)
     finish = db.Column(db.Date, nullable=True)
 
-    association = db.relationship('Association', back_populates='manager', lazy='joined')
+    association = db.relationship('Association', back_populates='manager', lazy='joined', overlaps="residents")
 
     __mapper_args__ = {
         'polymorphic_identity': 'manager',

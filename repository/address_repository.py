@@ -28,7 +28,7 @@ class AddressRepository:
             return None
         existing_address = Address.query.filter_by(street=address.street, city=address.city, state=address.state).first()
         if existing_address:
-            return existing_address.to_dict()
+            return existing_address
         db.session.add(address)
         db.session.commit()
         return address

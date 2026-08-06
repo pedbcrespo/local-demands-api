@@ -30,7 +30,7 @@ def create():
         return jsonify({'error': 'JSON inválido'}), 400
     address = service.create(address_request)
     if address != None:
-        jsonify(address), 200 
+        return jsonify(address), 200 
     return jsonify({'error': 'Could not register address'}), 400
 
 @address_bp.route('/delete/<int:address_id>', methods=['DELETE'])

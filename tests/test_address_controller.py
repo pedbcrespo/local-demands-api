@@ -11,8 +11,7 @@ def test_create_address_success(client):
     }
 
     response = client.post("/local-demands/address/register", json=payload)
-
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert response.json["city"] == "Rio de Janeiro"
 
 def test_get_states(client):
@@ -55,3 +54,9 @@ def test_get_cities_by_state_success(client, app):
     assert "Rio de Janeiro" in cities
     assert "Cabo Frio" in cities
     assert "São Paulo" not in cities
+
+def test_get_cities_by_state_empty_result(client):
+    response = client.get(f"/local-demands/address/state/{State.MG.code}")
+
+    assert response.status_code == 200
+    assert response.json == []
