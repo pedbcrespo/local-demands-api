@@ -35,10 +35,10 @@ class AddressService:
             city=address_data.city,
             state=address_data.state
         )
-        if self.__verify_existing_address(address):
-            return address.to_dict()
+        existing_address = self.__verify_existing_address(address)
+        if existing_address != None:
+            return existing_address.to_dict()
         saved_address = self.address_repository.create(address)
-        print(saved_address)
         return saved_address.to_dict() if saved_address != None else None
 
     def delete(self, address_id: int) -> bool:
@@ -47,9 +47,9 @@ class AddressService:
         is_deleted = self.address_repository.delete(address_id)
         return is_deleted
 
-    def __verify_existing_address(self, address: Address) -> bool:
+    def __verify_existing_address(self, address: Address) -> Address | None:
         existing_address = self.address_repository.get_by_address(address)
-        return existing_address != None and len(existing_address) > 0
+        return existing_address[0] if len(existing_address) > 0 else None
 
     def __is_used_address(self, address_id: int) -> bool:
         address_list = self.demand_repository.get_by_address_id(address_id)

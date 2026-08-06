@@ -24,11 +24,6 @@ class AddressRepository:
         return [address for address in Address.query.filter(db.or_(*filters)).distinct().all()]
 
     def create(self, address: Address) -> Address | None:
-        if not address:
-            return None
-        existing_address = Address.query.filter_by(street=address.street, city=address.city, state=address.state).first()
-        if existing_address:
-            return existing_address
         db.session.add(address)
         db.session.commit()
         return address
