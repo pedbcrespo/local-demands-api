@@ -20,14 +20,14 @@ def login():
         return jsonify({'error': 'Resident not found'}), 404
     return jsonify(resident), 200
 
-@resident_bp.route('', methods=['POST'])
+@resident_bp.route('/register', methods=['POST'])
 def create():
     data = request.get_json()
     resident_request = ResidentRequest.from_dict(data)
     registered_resident = service.create(resident_request)
     return jsonify(registered_resident), 200
 
-@resident_bp.route('/<int:resident_id>', methods=['PUT'])
+@resident_bp.route('/update/<int:resident_id>', methods=['PUT'])
 def update(resident_id: int):
     data = request.get_json()
     resident_request = ResidentRequest.from_dict(data)
@@ -36,7 +36,7 @@ def update(resident_id: int):
         return jsonify({'error': 'Resident not found'}), 404
     return jsonify(updated_resident), 200
 
-@resident_bp.route('/<resident_id>', methods=['DELETE'])
+@resident_bp.route('/delete/<resident_id>', methods=['DELETE'])
 def delete(resident_id: int):
     is_deleted = service.delete(resident_id)
     if is_deleted:

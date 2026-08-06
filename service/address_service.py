@@ -2,10 +2,14 @@
 from model.request.address_request import AddressRequest
 from repository.address_repository import AddressRepository
 from model.address import Address
+from model.enums import State
 
 class AddressService:
     def __init__(self, address_repository: AddressRepository):
         self.address_repository = address_repository
+
+    def get_states(self):
+        return State.get_state_codes()
 
     def get_cities_by_state(self, state: str) -> list[dict]:
         if not state:

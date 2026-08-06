@@ -23,7 +23,7 @@ class AddressRepository:
         
         return [address for address in Address.query.filter(db.or_(*filters)).distinct().all()]
 
-    def create(self, address: Address) -> dict | None:
+    def create(self, address: Address) -> Address | None:
         if not address:
             return None
         existing_address = Address.query.filter_by(street=address.street, city=address.city, state=address.state).first()
@@ -31,9 +31,9 @@ class AddressRepository:
             return existing_address.to_dict()
         db.session.add(address)
         db.session.commit()
-        return address.to_dict()
+        return address
 
-    def update(self, address_id: int, data: Address) -> dict | None:
+    def update(self, address_id: int, data: Address) -> Address | None:
         address = db.session.get(Address, address_id)
         if not address:
             return None
@@ -41,7 +41,7 @@ class AddressRepository:
         address.city   = data.get('city', address.city)
         address.state  = data.get('state', address.state)
         db.session.commit()
-        return address.to_dict()
+        return address
 
     def delete(self, address_id: int) -> bool:
         address = db.session.get(Address, address_id)

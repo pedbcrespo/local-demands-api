@@ -39,9 +39,12 @@ class ResidentService:
         if self.__verify_existing_resident(resident):
             return None
         registered_resident = self.resident_repository.create(resident)
-        return registered_resident.to_dict() if registered_resident else None
+        resident_dict = registered_resident.to_dict() if registered_resident else None
+        if resident_dict != None:
+            resident_dict.pop('token', self.token_service.generate_token(resident))
+        return resident_dict
 
-    def update(self, resident_id: int, resident_data: ResidentRequest) -> dict | None:
+    def update(self, token: str, resident_id: int, resident_data: ResidentRequest) -> dict | None:
         resident = Resident(
             full_name=resident_data.full_name,
             cpf=resident_data.cpf,
@@ -49,7 +52,10 @@ class ResidentService:
             address_id=resident_data.address_id
         )
         updated_resident = self.resident_repository.update(resident_id, resident)
-        return updated_resident.to_dict() if updated_resident else None
+        resident_dict = updated_resident.to_dict() if updated_resident else None
+        if resident_dict != None:
+            resident_dict.pop('token', token)
+        return resident_dict
 
     def delete(self, resident_id: int) -> bool:
         is_deleted = self.resident_repository.delete(resident_id)

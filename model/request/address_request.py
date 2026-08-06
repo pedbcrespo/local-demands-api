@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-
-from model.request.demand_request import DemandRequest
+from model.request import DemandRequest
 
 @dataclass
 class AddressRequest:
