@@ -1,7 +1,4 @@
-from sqlalchemy import Date
-
 from config.db_config import db
-from model.manager import Manager
 
 class Resident(db.Model):
     __tablename__ = 'resident'
@@ -37,14 +34,3 @@ class Resident(db.Model):
             'address': self.address.to_dict() if self.address else None,
             'association': self.association.name if self.association else None,
         }
-
-    def to_manager(self):
-        from model.manager import Manager
-        return Manager(
-            full_name=self.full_name,
-            cpf=self.cpf,
-            phone=self.phone,
-            address_id=self.address_id,
-            start= Date.today(),
-            finish=None
-        )

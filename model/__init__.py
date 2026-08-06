@@ -3,7 +3,3 @@ from .resident import Resident
 from .demand import Demand
 from .association import Association
 from .manager import Manager
-from .enums.status import Status
-from request.demand_request import DemandRequest
-from request.address_request import AddressRequest
-from request.resident_request import ResidentRequest

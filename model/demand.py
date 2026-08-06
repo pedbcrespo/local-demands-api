@@ -1,6 +1,5 @@
 from config.db_config import db 
-from model.enums.status import Status
-from model.enums.demand_type import DemandType
+from model.enums import Status, DemandType
 
 class Demand(db.Model):
     __tablename__ = 'demand'

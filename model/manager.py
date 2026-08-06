@@ -1,5 +1,5 @@
 from sqlalchemy import Date
-
+from datetime import date
 from model.resident import Resident
 from config.db_config import db
 
@@ -7,7 +7,7 @@ class Manager(Resident):
     __tablename__ = 'manager'
 
     id = db.Column(db.Integer, db.ForeignKey('resident.id'), primary_key=True)
-    start = db.Column(db.Date, nullable=False, default=Date.today())
+    start = db.Column(db.Date, nullable=False, default=date.today)
     finish = db.Column(db.Date, nullable=True)
 
     association = db.relationship('Association', back_populates='manager', lazy='joined')
