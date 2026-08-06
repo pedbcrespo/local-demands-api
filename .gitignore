@@ -1,4 +1,5 @@
 codealike.json
 **/venv/**
 **/__pycache__/**
-*.json
+**/.vscode/**
+**/.pytest_cache/**

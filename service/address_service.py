@@ -3,6 +3,8 @@ from model.request import AddressRequest
 from repository import AddressRepository, DemandRepository
 from model import Address
 from model.enums import State
+from pathlib import Path
+import json
 
 class AddressService:
     def __init__(self, address_repository: AddressRepository, demand_repository: DemandRepository):
@@ -15,14 +17,10 @@ class AddressService:
     def get_cities_by_state(self, state: str) -> list[dict]:
         if not state:
             return []
-    
-        address_filter = Address(
-            street=None,
-            district=None,
-            city=None,
-            state=state
-        )
-        return [add.to_dict() for add in self.address_repository.get_by_address(address_filter)]
+        cities = self.__read_brazil_cities_json()
+        filtered_cities = list(filter(lambda city: city['state_code'] == state, cities))
+        return filtered_cities
+
 
     def get_addresses_by_state_and_city(self, state: str, city: str) -> list[dict]:
         if not state or not city:
@@ -56,4 +54,11 @@ class AddressService:
     def __is_used_address(self, address_id: int) -> bool:
         address_list = self.demand_repository.get_by_address_id(address_id)
         return len(address_list) > 0
+
+    def __read_brazil_cities_json(self):
+        FILE_NAME = "brazil_cities.json"
+        full_file_path = Path(__file__).resolve().parent.parent / FILE_NAME
+        with open(full_file_path, mode='r', encoding='utf-8') as file:
+            return json.load(file)
+
 
