@@ -1,6 +1,6 @@
 from config.db_config import db
-from model.address import Address
-from model.enums import State
+from model import Address
+from model.enums import State 
 
 BASE_URL = "/local-demands/address"
 
