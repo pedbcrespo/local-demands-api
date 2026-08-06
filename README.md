@@ -16,8 +16,8 @@ Considere o cenario onde em cidades há em um mesmo bairro, diferentes associaç
 *  [ ] Somente o sindico pode deletar a associação
 
 ### Demanda
-* [ ] Quando criada, tem que ter um morador e um endereço
-* [ ] Quando criada, possui status inicial de PENDENTE
+* [x] Quando criada, tem que ter um morador e um endereço
+* [x] Quando criada, possui status inicial de PENDENTE
 * [ ] Uma vez marcada como FINALIZADA, não pode ser mais alterada
 
 ### Endereços

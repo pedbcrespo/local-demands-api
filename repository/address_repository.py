@@ -11,7 +11,7 @@ class AddressRepository:
             {'case': lambda add: add.street, 'filter': lambda add: Address.street.ilike(f'%{add.street}%')},
             {'case': lambda add: add.district, 'filter': lambda add: Address.district.ilike(f'%{add.district}%')},
             {'case': lambda add: add.city, 'filter': lambda add: Address.city.ilike(f'%{add.city}%')},
-            {'case': lambda add: add.state, 'filter': lambda add: Address.state.ilike(f'%{add.state}%')},
+            {'case': lambda add: add.state, 'filter': lambda add: Address.state == add.state},
         ]
 
         for case in filter_cases:

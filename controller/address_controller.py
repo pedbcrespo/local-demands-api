@@ -15,13 +15,8 @@ def get_states():
 
 @address_bp.route('/state/<state>', methods=['GET'])
 def get_cities_by_state(state: str):
-    states = service.get_cities_by_state(state)
-    return jsonify(states), 200
-
-@address_bp.route('/state/<state>/city/<city>', methods=['GET'])
-def get_addresses_by_state_and_city(state: str, city: str):
-    addresses = service.get_addresses_by_state_and_city(state, city)
-    return jsonify(addresses), 200
+    cities = service.get_cities_by_state(state)
+    return jsonify(cities), 200
 
 @address_bp.route('/register', methods=['POST'])
 def create():

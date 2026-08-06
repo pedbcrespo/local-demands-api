@@ -1,14 +1,20 @@
 from flask import Flask
 from config.db_config import init_db
-from model.address import Address
 from controller import address_bp, demand_bp, resident_bp
 
-app = Flask(__name__)
-init_db(app)
+def create_app(config_override=None):
+    app = Flask(__name__)
+    if config_override:
+        app.config.update(config_override)
 
-app.register_blueprint(address_bp)
-app.register_blueprint(demand_bp)
-app.register_blueprint(resident_bp)
+    init_db(app)
+
+    app.register_blueprint(address_bp)
+    app.register_blueprint(demand_bp)
+    app.register_blueprint(resident_bp)
+
+    return app
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)

@@ -14,8 +14,14 @@ class AddressService:
     def get_cities_by_state(self, state: str) -> list[dict]:
         if not state:
             return []
-        address = Address(state=state)
-        return [add.to_dict() for add in self.address_repository.get_by_address(address)]
+    
+        address_filter = Address(
+            street=None,
+            district=None,
+            city=None,
+            state=state
+        )
+        return [add.to_dict() for add in self.address_repository.get_by_address(address_filter)]
 
     def get_addresses_by_state_and_city(self, state: str, city: str) -> list[dict]:
         if not state or not city:

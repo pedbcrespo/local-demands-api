@@ -7,6 +7,9 @@ class DemandRepository:
     def get_all(self) -> list[Demand]:
         return [d for d in Demand.query.all()]    
 
+    def get_by_id(self, demand_id: int) -> Demand:
+        return Demand.query.filter_by(id=demand_id).first()
+
     def get_by_resident_id(self, resident_id: int) -> list[Demand]:
         return [d for d in Demand.query.filter_by(resident_id=resident_id).all()]
 

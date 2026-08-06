@@ -4,7 +4,7 @@ from repository.demand_repository import DemandRepository
 from repository.address_repository import AddressRepository
 from repository.resident_repository import ResidentRepository
 from model.demand import Demand
-from model.enums.demand_type import DemandType
+from model.enums import DemandType, Status
 from service.token_service import TokenService
 
 class DemandService:
@@ -40,6 +40,16 @@ class DemandService:
         if not self.__validate_request(token):
             return False
         return self.demand_repository.finish(demand_id)
+
+    def delete(self, token: str, demand_id: int) -> bool:
+        if not self.__validate_request(token):
+            return False
+
+        demand = self.demand_repository.get_by_id(demand_id)
+        if demand == None or demand.status == Status.FINISHED:
+            return False
+        self.demand_repository.delete(demand_id)
+        return True
 
     def __verify_existing_resident_and_address(self, resident_id: int, address_id: int) -> bool:
         existing_resident = self.resident_repository.get(resident_id)
