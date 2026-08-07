@@ -54,7 +54,6 @@ def test_login_success(client, app):
     assert response.json.get('id') is not None
     assert response.json.get('token') is not None
 
-
 def test_update_resident(client, app):
     TEST_CPF = "12345678910"
     with app.app_context():
@@ -88,4 +87,35 @@ def test_update_resident(client, app):
 
     assert response.status_code == 200
     assert response.json.get('phone') is not None and response.json.get('phone') == PHONE_TEST
-    
+
+def test_delete_resident(client, app):
+    TEST_CPF = "12345678910"
+    with app.app_context():
+        address = Address(
+            street="Av. Atlântica",
+            district="Copacabana",
+            city="Rio de Janeiro",
+            state=State.RJ.code
+        )
+        address.id = 1
+        db.session.add_all([address])
+        db.session.commit()
+
+        resident = Resident(
+            full_name="Fulano de Teste",
+            cpf=TEST_CPF,
+            phone="22999999999",
+            address_id=1
+        )
+        resident.id = 1
+        db.session.add_all([resident])
+        db.session.commit()
+
+    response = client.post(f"{BASE_URL}/login", json={"cpf": TEST_CPF})
+    resident_id = response.json['id']
+    token = response.json['token']
+    response = client.delete(f"{BASE_URL}/delete/{resident_id}", headers={"Authorization": f"Bearer {token}"})
+
+    assert response.status_code == 200
+    assert response.json.get('error') is None
+        

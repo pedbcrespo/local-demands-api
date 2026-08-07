@@ -39,7 +39,8 @@ def update(resident_id: int):
 
 @resident_bp.route('/delete/<resident_id>', methods=['DELETE'])
 def delete(resident_id: int):
-    is_deleted = service.delete(resident_id)
+    token = get_token()
+    is_deleted = service.delete(token, resident_id)
     if is_deleted:
         return jsonify({'message': 'Resident deleted successfully'}), 200
     else:
