@@ -8,7 +8,7 @@ Considere o cenario onde em cidades há em um mesmo bairro, diferentes associaç
 ## Regras de negocio:
 ### Moradores
 *  [x] Todo morador pode postar uma demanda
-*  [ ] Apenas o gerenciador (sindico) pode finalizar uma demanda
+*  [x] Apenas o gerenciador (sindico) pode finalizar uma demanda
 *  [ ] Só pode haver 1 associação por rua 
 *  [ ] Qualquer morador pode criar ou participar de uma associação
 *  [ ] O morador que criar a associaçao, automaticamente vira o sindico
