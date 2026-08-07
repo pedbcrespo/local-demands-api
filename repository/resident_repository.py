@@ -1,5 +1,6 @@
 from config.db_config import db
 from model.resident import Resident
+from model.request import ResidentRequest
 
 
 class ResidentRepository:
@@ -12,12 +13,15 @@ class ResidentRepository:
         db.session.commit()
         return resident
 
-    def update(self, resident_id: int, data: Resident) -> Resident | None:
+    def update(self, resident_id: int, data: ResidentRequest) -> Resident | None:
         resident = db.session.get(Resident, resident_id)
         if not resident:
             return None
-        resident.full_name = data.get('full_name', resident.full_name)
-        resident.phone = data.get('phone', resident.phone)
+        resident.full_name = data.full_name
+        resident.phone = data.phone
+        resident.address_id = data.address_id
+        if data.association_id is not None:
+            resident.association_id = data.association_id
         db.session.commit()
         return resident
 

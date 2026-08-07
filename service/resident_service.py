@@ -20,7 +20,11 @@ class ResidentService:
 
     def login(self, cpf: str) -> dict | None:
         resident = self.resident_repository.get_by_cpf(cpf)
-        return self.__set_token(resident) if resident != None else None
+        resident_dict = None
+        if resident != None:
+            resident_dict = self.__set_token(resident)
+            resident_dict["id"] = resident.id
+        return resident_dict
 
     def get_by_cpf(self, cpf: str) -> Resident | None:
         resident = self.resident_repository.get_by_cpf(cpf)
@@ -41,13 +45,9 @@ class ResidentService:
         return self.__set_token(resident)
 
     def update(self, token: str, resident_id: int, resident_data: ResidentRequest) -> dict | None:
-        resident = Resident(
-            full_name=resident_data.full_name,
-            cpf=resident_data.cpf,
-            phone=resident_data.phone,
-            address_id=resident_data.address_id
-        )
-        updated_resident = self.resident_repository.update(resident_id, resident)
+        if not self.token_service.validate_request(token):
+            return None
+        updated_resident = self.resident_repository.update(resident_id, resident_data)
         resident_dict = updated_resident.to_dict() if updated_resident else None
         if resident_dict != None:
             resident_dict.pop('token', token)

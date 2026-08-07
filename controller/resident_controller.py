@@ -30,8 +30,9 @@ def create():
 @resident_bp.route('/update/<int:resident_id>', methods=['PUT'])
 def update(resident_id: int):
     data = request.get_json()
+    token = get_token()
     resident_request = ResidentRequest.from_dict(data)
-    updated_resident = service.update(resident_id, resident_request)
+    updated_resident = service.update(token, resident_id, resident_request)
     if not updated_resident:
         return jsonify({'error': 'Resident not found'}), 404
     return jsonify(updated_resident), 200
@@ -43,3 +44,8 @@ def delete(resident_id: int):
         return jsonify({'message': 'Resident deleted successfully'}), 200
     else:
         return jsonify({'error': 'Resident not found'}), 404
+
+def get_token():
+    auth_header = request.headers.get('Authorization')
+    token = auth_header.split(' ')[1]
+    return token
