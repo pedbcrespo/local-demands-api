@@ -8,8 +8,19 @@ class Association(db.Model):
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
 
     address = db.relationship('Address', lazy='joined')
-    residents = db.relationship('Resident', back_populates='association', lazy='select')
-    manager = db.relationship('Manager', back_populates='association', uselist=False, lazy='joined')
+    residents = db.relationship(
+        'Resident',
+        back_populates='association',
+        lazy='select',
+        overlaps="manager"
+    )
+    manager = db.relationship(
+        'Manager',
+        back_populates='association',
+        uselist=False,
+        lazy='joined',
+        overlaps="residents,association"
+    )
 
     def __init__(self, name: str, address_id: int):
         self.name       = name
@@ -25,5 +36,6 @@ class Association(db.Model):
 
 
     def __get_residents(self):
-        filtered_residents = [resident for resident in self.residents if resident.id != self.manager.id]
-        return filtered_residents
+        if not self.manager:
+            return self.residents
+        return [resident for resident in self.residents if resident.id != self.manager.id]

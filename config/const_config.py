@@ -1,2 +1,4 @@
+import secrets
+
 BASE_URL = 'local-demands'
-SECRET_KEY = 'chavesecreta1234567890'
+SECRET_KEY = secrets.token_hex(32)
