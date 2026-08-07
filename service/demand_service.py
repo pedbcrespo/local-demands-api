@@ -18,7 +18,7 @@ class DemandService:
         return [demand.to_dict() for demand in demands]
 
     def create(self, token: str, demand_data: DemandRequest) -> dict | None:
-        if not self.__validate_request(token):
+        if not self.token_service.validate_request(token):
             return None
         
         if not self.__verify_existing_resident_and_address(demand_data.resident_id, demand_data.address_id):
@@ -37,12 +37,12 @@ class DemandService:
         manager = self.resident_repository.get(resident_id)
         if not manager or manager.type != 'manager':
             return False
-        if not self.__validate_request(token):
+        if not self.token_service.validate_request(token):
             return False
         return self.demand_repository.finish(demand_id)
 
     def delete(self, token: str, demand_id: int) -> bool:
-        if not self.__validate_request(token):
+        if not self.token_service.validate_request(token):
             return False
 
         demand = self.demand_repository.get_by_id(demand_id)
@@ -57,7 +57,3 @@ class DemandService:
         if not existing_resident or not existing_address:
             return False
         return True
-
-    def __validate_request(self, token: str) -> bool:
-        payload = self.token_service.decode_token(token)
-        return 'error' not in payload and payload['type'] == 'resident'

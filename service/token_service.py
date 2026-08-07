@@ -25,3 +25,8 @@ class TokenService:
             return {'error': 'Invalid token'}
         except Exception as e:
             return {'error': str(e)}
+
+    @staticmethod
+    def validate_request(self, token: str) -> bool:
+        payload = self.token_service.decode_token(token)
+        return 'error' not in payload and payload['type'] == 'resident'

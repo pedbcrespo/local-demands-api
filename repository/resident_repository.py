@@ -8,9 +8,6 @@ class ResidentRepository:
         return resident
 
     def create(self, resident: Resident) -> Resident | None:
-        existing_resident = Resident.query.filter_by(full_name=resident.full_name, phone=resident.phone, address_id=resident.address_id).first()
-        if existing_resident:
-            return existing_resident
         db.session.add(resident)
         db.session.commit()
         return resident
