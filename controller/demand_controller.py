@@ -6,7 +6,7 @@ from service.demand_service import DemandService
 from model.request.demand_request import DemandRequest
 from config.const_config import BASE_URL
 
-demand_bp = Blueprint('demand', __name__, url_prefix=f'/{BASE_URL}/demand')
+demand_bp = Blueprint('demand', __name__, url_prefix=f'/{BASE_URL}/demands')
 
 service = DemandService(DemandRepository(), AddressRepository(), ResidentRepository())
 
