@@ -18,8 +18,9 @@ def list():
 @demand_bp.route('', methods=['POST'])
 def create():
     data = request.get_json()
+    token = get_token()
     demand_request = DemandRequest.from_dict(data)
-    demand = service.create(demand_request)
+    demand = service.create(token, demand_request)
     if not demand:
         return jsonify({'error': 'Failed to create demand'}), 400
     return jsonify(demand), 200

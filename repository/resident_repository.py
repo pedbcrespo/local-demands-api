@@ -4,6 +4,10 @@ from model.request import ResidentRequest
 
 
 class ResidentRepository:
+    def get(self, resident_id: int) -> Resident | None:
+        resident = db.session.get(Resident, resident_id)
+        return resident
+
     def get_by_cpf(self, cpf: str) -> Resident | None:
         resident = Resident.query.filter_by(cpf=cpf).first()
         return resident

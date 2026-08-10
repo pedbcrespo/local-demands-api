@@ -9,6 +9,7 @@ BASE_URL_LOGIN = f"{BASE_URL}/residents"
 
 def test_create_demand(client, app):
     TEST_CPF = "12345678910"
+    TEST_RESIDENT_ID = 1
     with app.app_context():
         address = Address(
             street="Av. Atlântica",
@@ -26,6 +27,7 @@ def test_create_demand(client, app):
             phone="22999999999",
             address_id=1
         )
+        resident.id = TEST_RESIDENT_ID
         db.session.add_all([resident])
         db.session.commit()
 
@@ -36,7 +38,7 @@ def test_create_demand(client, app):
         "title": "Test Demand",
         "description": "A description to a test demand",
         "address_id": 1,
-        "resident_id": resident.id,
+        "resident_id": TEST_RESIDENT_ID,
         "type": DemandType.STRUCTURAL.value
     }
 

@@ -11,6 +11,7 @@ class DemandService:
     def __init__(self, demand_repository: DemandRepository, address_repository: AddressRepository, resident_repository: ResidentRepository) -> None:
         self.demand_repository = demand_repository
         self.address_repository = address_repository
+        self.resident_repository = resident_repository
         self.token_service = TokenService()
 
     def get_all(self) -> list[dict]:
