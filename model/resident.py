@@ -5,7 +5,7 @@ class Resident(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     full_name = db.Column(db.String(255), nullable=False)
-    cpf = db.Column(db.String(255), nullable=False)
+    cpf = db.Column(db.String(255), unique=True, nullable=False)
     phone = db.Column(db.String(255), nullable=False)
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
 
