@@ -30,14 +30,15 @@ class DemandService:
         saved_demand = self.demand_repository.create(demand)
         return saved_demand.to_dict() if saved_demand else None
 
-    def finish(self, resident_id: int, demand_id: int) -> bool:
-        manager = self.resident_repository.get(resident_id)
-        if not manager or manager.type != 'manager':
-            return False
-        return self.demand_repository.finish(demand_id)
+    def finish(self, demand_id: int) -> dict | None:
+        demand = self.demand_repository.get(demand_id)
+        if demand.status == Status.FINISHED:
+            return {'message': 'Cant finish demand that are already finished'}
+        isFinished = self.demand_repository.finish(demand_id)
+        return demand.to_dict() if isFinished else None
 
     def delete(self, demand_id: int) -> bool:
-        demand = self.demand_repository.get_by_id(demand_id)
+        demand = self.demand_repository.get(demand_id)
         if demand == None or demand.status == Status.FINISHED:
             return False
         self.demand_repository.delete(demand_id)

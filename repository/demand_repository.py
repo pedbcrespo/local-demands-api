@@ -7,7 +7,7 @@ class DemandRepository:
     def get_all(self) -> list[Demand]:
         return [d for d in Demand.query.all()]    
 
-    def get_by_id(self, demand_id: int) -> Demand:
+    def get(self, demand_id: int) -> Demand:
         return Demand.query.filter_by(id=demand_id).first()
 
     def get_by_resident_id(self, resident_id: int) -> list[Demand]:
@@ -39,7 +39,7 @@ class DemandRepository:
         db.session.commit()
         return demand
 
-    def finish(demand_id: int) -> bool:
+    def finish(self, demand_id: int) -> bool:
         demand = db.session.get(Demand, demand_id)
         if not demand:
             return False

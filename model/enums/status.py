@@ -1,5 +1,5 @@
-from enum import Enum
+from enum import StrEnum
 
-class Status(Enum):
+class Status(StrEnum):
     PENDING = 'PENDING'
     FINISHED = 'FINISHED'

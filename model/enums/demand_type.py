@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
-class DemandType(Enum):
+class DemandType(StrEnum):
     STRUCTURAL = 'STRUCTURAL'
     EMERGENCY = 'EMERGENCY'
     PERIODIC = 'PERIODIC'

@@ -26,12 +26,10 @@ def create():
 
 @demand_bp.route('/<int:demand_id>/finish', methods=['PUT'])
 def finish(demand_id: int):
-    data = request.get_json()
-    resident_id = data.get('resident_id')
-    success = service.finish(resident_id, demand_id)
-    if not success:
+    demand = service.finish(demand_id)
+    if not demand:
         return jsonify({'error': 'Failed to finish demand'}), 400
-    return jsonify({'message': 'Demand finished successfully'}), 200
+    return jsonify(demand), 200
 
 @demand_bp.route('/<int:demand_id>/delete', methods=['DELETE'])
 def delete(demand_id: int):
