@@ -1,5 +1,6 @@
 from config.db_config import db 
 from model.enums import Status, DemandType
+import datetime
 
 class Demand(db.Model):
     __tablename__ = 'demand'
@@ -10,6 +11,7 @@ class Demand(db.Model):
     resident_id = db.Column(db.Integer, db.ForeignKey('resident.id'), nullable=False)
     status = db.Column(db.Enum(Status), default=Status.PENDING, nullable=False)
     type = db.Column(db.Enum(DemandType), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
 
     address = db.relationship('Address', lazy='joined')
     resident = db.relationship('Resident', lazy='joined')
@@ -21,12 +23,16 @@ class Demand(db.Model):
         self.resident_id = resident_id
         self.type = type
         self.status = Status('PENDING')
+        self.created_at = datetime.datetime.now()
 
     def to_dict(self):
         return {
+            'id': self.id,
             'title': self.title,
             'description': self.description,
             'address': self.address.to_dict() if self.address else None,
             'resident': self.resident.full_name if self.resident else None,
-            'status': self.status.value
+            'status': self.status.value,
+            'type': self.type.value,
+            'created_at': self.created_at.isoformat()
         }

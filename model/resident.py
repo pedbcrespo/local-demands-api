@@ -19,6 +19,7 @@ class Resident(db.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'cpf': self.cpf,
             'full_name': self.full_name,
             'phone': self.phone,
