@@ -1,15 +1,13 @@
 from flask import Blueprint, request, jsonify
 from model.request.resident_request import ResidentRequest
 from config.db_config import db
-from service.address_service import AddressService
 from service.resident_service import ResidentService
 from repository.resident_repository import ResidentRepository
-from repository.association_repository import AssociationRepository
 from config.const_config import BASE_URL
 
 resident_bp = Blueprint('residentservice = ResidentService(ResidentRepository())', __name__, url_prefix=f'/{BASE_URL}/residents')
 
-service = ResidentService(ResidentRepository(), AssociationRepository())
+service = ResidentService(ResidentRepository())
 
 @resident_bp.route('/login', methods=['POST'])
 def login():
@@ -27,20 +25,20 @@ def create():
     registered_resident = service.create(resident_request)
     return jsonify(registered_resident), 200
 
-@resident_bp.route('/update/<int:resident_id>', methods=['PUT'])
-def update(resident_id: int):
+@resident_bp.route('/update/', methods=['PUT'])
+def update():
     data = request.get_json()
     token = get_token()
     resident_request = ResidentRequest.from_dict(data)
-    updated_resident = service.update(token, resident_id, resident_request)
+    updated_resident = service.update(token, resident_request)
     if not updated_resident:
         return jsonify({'error': 'Resident not found'}), 404
     return jsonify(updated_resident), 200
 
-@resident_bp.route('/delete/<resident_id>', methods=['DELETE'])
-def delete(resident_id: int):
+@resident_bp.route('/delete/', methods=['DELETE'])
+def delete():
     token = get_token()
-    is_deleted = service.delete(token, resident_id)
+    is_deleted = service.delete(token)
     if is_deleted:
         return jsonify({'message': 'Resident deleted successfully'}), 200
     else:

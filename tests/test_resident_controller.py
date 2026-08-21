@@ -83,7 +83,7 @@ def test_update_resident(client, app):
     login_resident['phone'] = PHONE_TEST
     login_resident['address_id'] = 1
     token = login_resident['token']
-    response = client.put(f"{BASE_URL}/update/{login_resident['id']}", json=login_resident, headers={"Authorization": f"Bearer {token}"})
+    response = client.put(f"{BASE_URL}/update/", json=login_resident, headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     assert response.json.get('phone') is not None and response.json.get('phone') == PHONE_TEST
@@ -112,9 +112,8 @@ def test_delete_resident(client, app):
         db.session.commit()
 
     response = client.post(f"{BASE_URL}/login", json={"cpf": TEST_CPF})
-    resident_id = response.json['id']
     token = response.json['token']
-    response = client.delete(f"{BASE_URL}/delete/{resident_id}", headers={"Authorization": f"Bearer {token}"})
+    response = client.delete(f"{BASE_URL}/delete/", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     assert response.json.get('error') is None

@@ -1,8 +1,33 @@
 # local-demands-api
 
 ## Ideia do projeto:
-Consiste em uma API que registra problemas locais de uma determinada cidade.
-Considere o cenario onde em cidades há em um mesmo bairro, diferentes associaçoes de moradores. Como saber se o mesmo problema pode estar ocorrendo em diferentes ruas. Com essa API, as informações ficam centralizadas facilitando a observação assim como a analise das mesmas.
+Consiste em uma API que registra demandas de determinada localização.
+As demandas podem ser desde problemas estruturais ate simples tarefas corriqueiras que acontecem nas localidades.
+As demandas são registradas por endereço, que geralmente contam com dados detalhados como Rua, Bairro, Cidade e Estado.
+
+## Como rodar a API:
+*   Baixe o projeto
+*   Recomendado criar um ambiente virtual:
+```
+python3 -m venv venv
+```
+
+(linux)
+```
+source ./venv/bin/activate
+```
+(windows)
+```
+./venv/scripts/activate
+```
+*   Com o ambiente virtual ativado, instale as dependencias:
+```
+pip install -r requirements.txt
+```
+*   Após a instalação, execute o comando:
+```
+python app.py
+```
 
 
 ## Regras de negocio:

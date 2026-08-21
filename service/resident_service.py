@@ -1,22 +1,12 @@
 from model.request.resident_request import ResidentRequest
 from repository.resident_repository import ResidentRepository
-from repository.association_repository import AssociationRepository
 from model.resident import Resident
 from service.token_service import TokenService
 
 class ResidentService:
-    def __init__(self, resident_repository: ResidentRepository, association_repository: AssociationRepository) -> None:
+    def __init__(self, resident_repository: ResidentRepository) -> None:
         self.resident_repository = resident_repository
-        self.association_repository = association_repository
         self.token_service = TokenService()
-        
-
-    def get_by_association(self, association_id: int) -> list[dict]:
-        association = self.association_repository.get_by_id(association_id)
-        if not association:
-            return []
-        residents = Resident.query.filter(Resident.association_id == association_id).all()
-        return [resident.to_dict() for resident in residents]
 
     def login(self, cpf: str) -> dict | None:
         resident = self.resident_repository.get_by_cpf(cpf)
@@ -44,7 +34,8 @@ class ResidentService:
             resident = self.resident_repository.create(resident)
         return self.__set_token(resident)
 
-    def update(self, token: str, resident_id: int, resident_data: ResidentRequest) -> dict | None:
+    def update(self, token: str, resident_data: ResidentRequest) -> dict | None:
+        resident_id = self.token_service.get_id(token)
         if not self.token_service.validate_request(token):
             return None
         updated_resident = self.resident_repository.update(resident_id, resident_data)
@@ -53,7 +44,8 @@ class ResidentService:
             resident_dict.pop('token', token)
         return resident_dict
 
-    def delete(self, token: str, resident_id: int) -> bool:
+    def delete(self, token: str) -> bool:
+        resident_id = self.token_service.get_id(token)
         if not self.token_service.validate_request(token):
             return False
         is_deleted = self.resident_repository.delete(resident_id)

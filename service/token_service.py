@@ -8,7 +8,7 @@ class TokenService:
     def generate_token(resident: Resident) -> str:
         payload = {
             'id': resident.id,
-            'type': resident.type,
+            'cpf': resident.cpf,
             'exp': datetime.now(timezone.utc) + timedelta(hours=8)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -29,4 +29,11 @@ class TokenService:
     @staticmethod
     def validate_request(token: str) -> bool:
         payload = TokenService.decode_token(token)
-        return 'error' not in payload and payload['type'] == 'resident'
+        return 'error' not in payload
+
+    @staticmethod
+    def get_id(token: str):
+        payload = TokenService.decode_token(token)
+        if 'error' in payload:
+            return None
+        return payload.get('id')
