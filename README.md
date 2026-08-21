@@ -29,21 +29,85 @@ pip install -r requirements.txt
 python app.py
 ```
 
+## Modelagem das entidades:
+```mermaid
+erDiagram
+	ADDRESS ||--o{ RESIDENT : possui
+	ADDRESS ||--o{ DEMAND : recebe
+	RESIDENT ||--o{ DEMAND : registra
+
+	ADDRESS {
+		int id PK
+		string street
+		string district
+		string city
+		string state
+	}
+
+	RESIDENT {
+		int id PK
+		string full_name
+		string cpf
+		string phone
+		int address_id FK
+	}
+
+	DEMAND {
+		int id PK
+		string title
+		string description
+		int address_id FK
+		int resident_id FK
+		enum status
+		enum type
+	}
+```
+
+### Address
+Representa o endereço onde os moradores residem e onde as demandas são registradas.
+
+| Atributo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | Integer | Sim | Identificador do endereço. |
+| `street` | String | Sim | Rua do endereço. |
+| `district` | String | Sim | Bairro do endereço. |
+| `city` | String | Sim | Cidade do endereço. |
+| `state` | String | Sim | Estado do endereço. |
+
+### Resident
+Representa o morador associado a um endereço.
+
+| Atributo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | Integer | Sim | Identificador do morador. |
+| `full_name` | String | Sim | Nome completo do morador. |
+| `cpf` | String | Sim | CPF do morador. |
+| `phone` | String | Sim | Telefone do morador. |
+| `address_id` | Integer | Sim | Chave estrangeira para `Address`. |
+
+### Demand
+Representa uma demanda registrada por um morador em um endereço.
+
+| Atributo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | Integer | Sim | Identificador da demanda. |
+| `title` | String | Sim | Título da demanda. |
+| `description` | String | Sim | Descrição da demanda. |
+| `address_id` | Integer | Sim | Chave estrangeira para `Address`. |
+| `resident_id` | Integer | Sim | Chave estrangeira para `Resident`. |
+| `status` | Enum | Sim | Status atual da demanda; inicia como `PENDING`. |
+| `type` | Enum | Sim | Tipo da demanda. |
+
+### Relacionamentos
+* Um `Address` pode estar associado a vários `Resident`.
+* Um `Address` pode receber várias `Demand`.
+* Um `Resident` pode registrar várias `Demand`.
+* Toda `Demand` deve estar associada a um `Address` e a um `Resident`.
+
 
 ## Regras de negocio:
 ### Moradores
-*  [x] Todo morador pode postar uma demanda
-*  [x] Apenas o gerenciador (sindico) pode finalizar uma demanda
-*  [ ] Só pode haver 1 associação por rua 
-*  [ ] Qualquer morador pode criar ou participar de uma associação
-*  [ ] O morador que criar a associaçao, automaticamente vira o sindico
-*  [ ] O sindico não pode ser trocado
-*  [ ] Somente o sindico pode deletar a associação
-
-### Demanda
-* [x] Quando criada, tem que ter um morador e um endereço
-* [x] Quando criada, possui status inicial de PENDENTE
+* [x] Todo morador pode postar uma demanda
+* [x] A demanda, quando criada, tem que ter um morador e um endereço e status inicial de PENDENTE
 * [x] Uma vez marcada como FINALIZADA, não pode ser mais alterada
-
-### Endereços
 * [x] O registro de endereços é sempre publico
