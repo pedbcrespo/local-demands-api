@@ -6,17 +6,8 @@ from service.token_service import TokenService
 class ResidentService:
     def __init__(self, resident_repository: ResidentRepository) -> None:
         self.resident_repository = resident_repository
-        self.token_service = TokenService()
 
-    def login(self, cpf: str) -> dict | None:
-        resident = self.resident_repository.get_by_cpf(cpf)
-        resident_dict = None
-        if resident != None:
-            resident_dict = self.__set_token(resident)
-            resident_dict["id"] = resident.id
-        return resident_dict
-
-    def get_by_cpf(self, cpf: str) -> Resident | None:
+    def get_by_cpf(self, cpf: str) -> dict | None:
         resident = self.resident_repository.get_by_cpf(cpf)
         return resident.to_dict() if resident else None
 
@@ -32,30 +23,23 @@ class ResidentService:
             resident = existing_resident
         else:
             resident = self.resident_repository.create(resident)
-        return self.__set_token(resident)
+        return resident.to_dict()
 
-    def update(self, token: str, resident_data: ResidentRequest) -> dict | None:
-        resident_id = self.token_service.get_id(token)
-        if not self.token_service.validate_request(token):
+    def update(self, resident_id: int, data: ResidentRequest) -> dict | None:
+        resident = self.resident_repository.get(resident_id)
+        if not resident:
             return None
-        updated_resident = self.resident_repository.update(resident_id, resident_data)
-        resident_dict = updated_resident.to_dict() if updated_resident else None
-        if resident_dict != None:
-            resident_dict.pop('token', token)
-        return resident_dict
+        for key, value in vars(data).items():
+            if key == 'id' or key == 'cpf':
+                continue
+            setattr(resident, key, value)
+        updated_resident = self.resident_repository.update(resident_id, resident)
+        return updated_resident.to_dict() if updated_resident else None
 
-    def delete(self, token: str) -> bool:
-        resident_id = self.token_service.get_id(token)
-        if not self.token_service.validate_request(token):
-            return False
+    def delete(self, resident_id: int) -> bool:
         is_deleted = self.resident_repository.delete(resident_id)
         return is_deleted
 
     def __verify_existing_resident(self, resident: Resident) -> bool:
         existing_resident = self.resident_repository.get_by_cpf(resident.cpf)
         return existing_resident
-
-    def __set_token(self, resident: Resident) -> dict:
-        resident_dict = resident.to_dict()
-        resident_dict['token'] = self.token_service.generate_token(resident)
-        return resident_dict

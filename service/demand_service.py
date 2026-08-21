@@ -5,23 +5,19 @@ from repository.address_repository import AddressRepository
 from repository.resident_repository import ResidentRepository
 from model.demand import Demand
 from model.enums import DemandType, Status
-from service.token_service import TokenService
 
 class DemandService:
     def __init__(self, demand_repository: DemandRepository, address_repository: AddressRepository, resident_repository: ResidentRepository) -> None:
         self.demand_repository = demand_repository
         self.address_repository = address_repository
         self.resident_repository = resident_repository
-        self.token_service = TokenService()
+
 
     def get_all(self) -> list[dict]:
         demands = self.demand_repository.get_all()
         return [demand.to_dict() for demand in demands]
 
-    def create(self, token: str, demand_data: DemandRequest) -> dict | None:
-        if not self.token_service.validate_request(token):
-            return None
-        
+    def create(self, demand_data: DemandRequest) -> dict | None:
         if not self.__verify_existing_resident_and_address(demand_data.resident_id, demand_data.address_id):
             return None
         demand = Demand(
@@ -34,18 +30,13 @@ class DemandService:
         saved_demand = self.demand_repository.create(demand)
         return saved_demand.to_dict() if saved_demand else None
 
-    def finish(self, token: str, resident_id: int, demand_id: int) -> bool:
+    def finish(self, resident_id: int, demand_id: int) -> bool:
         manager = self.resident_repository.get(resident_id)
         if not manager or manager.type != 'manager':
             return False
-        if not self.token_service.validate_request(token):
-            return False
         return self.demand_repository.finish(demand_id)
 
-    def delete(self, token: str, demand_id: int) -> bool:
-        if not self.token_service.validate_request(token):
-            return False
-
+    def delete(self, demand_id: int) -> bool:
         demand = self.demand_repository.get_by_id(demand_id)
         if demand == None or demand.status == Status.FINISHED:
             return False

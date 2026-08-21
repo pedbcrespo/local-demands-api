@@ -17,15 +17,10 @@ class ResidentRepository:
         db.session.commit()
         return resident
 
-    def update(self, resident_id: int, data: ResidentRequest) -> Resident | None:
+    def update(self, resident_id: int, data: Resident) -> Resident | None:
         resident = db.session.get(Resident, resident_id)
-        if not resident:
-            return None
-        resident.full_name = data.full_name
-        resident.phone = data.phone
-        resident.address_id = data.address_id
-        if data.association_id is not None:
-            resident.association_id = data.association_id
+        data.id = resident_id
+        resident = data
         db.session.commit()
         return resident
 

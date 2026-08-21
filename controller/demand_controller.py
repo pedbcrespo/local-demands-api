@@ -18,9 +18,8 @@ def list():
 @demand_bp.route('', methods=['POST'])
 def create():
     data = request.get_json()
-    token = get_token()
     demand_request = DemandRequest.from_dict(data)
-    demand = service.create(token, demand_request)
+    demand = service.create(demand_request)
     if not demand:
         return jsonify({'error': 'Failed to create demand'}), 400
     return jsonify(demand), 200
@@ -28,22 +27,15 @@ def create():
 @demand_bp.route('/<int:demand_id>/finish', methods=['PUT'])
 def finish(demand_id: int):
     data = request.get_json()
-    token = get_token()
     resident_id = data.get('resident_id')
-    success = service.finish(token, resident_id, demand_id)
+    success = service.finish(resident_id, demand_id)
     if not success:
         return jsonify({'error': 'Failed to finish demand'}), 400
     return jsonify({'message': 'Demand finished successfully'}), 200
 
 @demand_bp.route('/<int:demand_id>/delete', methods=['DELETE'])
 def delete(demand_id: int):
-    token = get_token()
-    success = service.delete(token, demand_id)
+    success = service.delete(demand_id)
     if not success:
         return jsonify({'error': 'Failed to delete demand'}), 400
     return jsonify({'message': 'Demand deleted successfully'}), 200
-
-def get_token():
-    auth_header = request.headers.get('Authorization')
-    token = auth_header.split(' ')[1]
-    return token

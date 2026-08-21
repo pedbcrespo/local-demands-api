@@ -27,7 +27,7 @@ def test_create_resident(client, app):
     assert response.status_code == 200
     assert response.json["cpf"] == "32112332112"
 
-def test_login_success(client, app):
+def test_get_resident(client, app):
     TEST_CPF = "12345678910"
     with app.app_context():
         address = Address(
@@ -49,13 +49,13 @@ def test_login_success(client, app):
         db.session.add_all([resident])
         db.session.commit()
 
-    response = client.post(f"{BASE_URL}/login", json={"cpf": TEST_CPF})
-    assert response.status_code == 200
-    assert response.json.get('id') is not None
-    assert response.json.get('token') is not None
+        response = client.get(f"{BASE_URL}/{TEST_CPF}")
+        assert response.status_code == 200
+        assert 'id' in response.json
 
 def test_update_resident(client, app):
     TEST_CPF = "12345678910"
+    TEST_RESIDENT_ID = 1
     with app.app_context():
         address = Address(
             street="Av. Atlântica",
@@ -73,23 +73,27 @@ def test_update_resident(client, app):
             phone="22999999999",
             address_id=1
         )
+        resident.id = TEST_RESIDENT_ID
         db.session.add_all([resident])
         db.session.commit()
 
     PHONE_TEST = "22997845162"
 
-    response = client.post(f"{BASE_URL}/login", json={"cpf": TEST_CPF})
-    login_resident = response.json
-    login_resident['phone'] = PHONE_TEST
-    login_resident['address_id'] = 1
-    token = login_resident['token']
-    response = client.put(f"{BASE_URL}/update/", json=login_resident, headers={"Authorization": f"Bearer {token}"})
+    request = {
+        'full_name':"Fulano de Teste",
+        'cpf':TEST_CPF,
+        'phone':PHONE_TEST,
+        'address_id':1
+    }
+
+    response = client.put(f"{BASE_URL}/update/{TEST_RESIDENT_ID}", json=request)
 
     assert response.status_code == 200
     assert response.json.get('phone') is not None and response.json.get('phone') == PHONE_TEST
 
 def test_delete_resident(client, app):
     TEST_CPF = "12345678910"
+    TEST_RESIDENT_ID = 1
     with app.app_context():
         address = Address(
             street="Av. Atlântica",
@@ -107,13 +111,11 @@ def test_delete_resident(client, app):
             phone="22999999999",
             address_id=1
         )
-        resident.id = 1
+        resident.id = TEST_RESIDENT_ID
         db.session.add_all([resident])
         db.session.commit()
 
-    response = client.post(f"{BASE_URL}/login", json={"cpf": TEST_CPF})
-    token = response.json['token']
-    response = client.delete(f"{BASE_URL}/delete/", headers={"Authorization": f"Bearer {token}"})
+    response = client.delete(f"{BASE_URL}/delete/{TEST_RESIDENT_ID}")
 
     assert response.status_code == 200
     assert response.json.get('error') is None

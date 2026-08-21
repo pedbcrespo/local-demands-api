@@ -5,7 +5,6 @@ from model.enums import State, DemandType
 
 BASE_URL = "/local-demands"
 BASE_URL_DEMANDS = f"{BASE_URL}/demands"
-BASE_URL_LOGIN = f"{BASE_URL}/residents"
 
 def test_create_demand(client, app):
     TEST_CPF = "12345678910"
@@ -31,9 +30,6 @@ def test_create_demand(client, app):
         db.session.add_all([resident])
         db.session.commit()
 
-    login_response = client.post(f"{BASE_URL_LOGIN}/login", json={"cpf": TEST_CPF})
-    token = login_response.json.get('token')
-
     demand_request = {
         "title": "Test Demand",
         "description": "A description to a test demand",
@@ -42,5 +38,5 @@ def test_create_demand(client, app):
         "type": DemandType.STRUCTURAL.value
     }
 
-    response = client.post(f"{BASE_URL_DEMANDS}", json=demand_request, headers={"Authorization": f"Bearer {token}"})
+    response = client.post(f"{BASE_URL_DEMANDS}", json=demand_request)
     assert response.status_code == 200  

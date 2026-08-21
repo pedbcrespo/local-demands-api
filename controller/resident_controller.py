@@ -9,13 +9,9 @@ resident_bp = Blueprint('residentservice = ResidentService(ResidentRepository())
 
 service = ResidentService(ResidentRepository())
 
-@resident_bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    cpf = data.get('cpf')
-    resident = service.login(cpf)
-    if not resident:
-        return jsonify({'error': 'Resident not found'}), 404
+@resident_bp.route('/<cpf>', methods=['GET'])
+def get(cpf: str):
+    resident = service.get_by_cpf(cpf)
     return jsonify(resident), 200
 
 @resident_bp.route('/register', methods=['POST'])
@@ -25,26 +21,19 @@ def create():
     registered_resident = service.create(resident_request)
     return jsonify(registered_resident), 200
 
-@resident_bp.route('/update/', methods=['PUT'])
-def update():
+@resident_bp.route('/update/<int:id>', methods=['PUT'])
+def update(id: int):
     data = request.get_json()
-    token = get_token()
     resident_request = ResidentRequest.from_dict(data)
-    updated_resident = service.update(token, resident_request)
+    updated_resident = service.update(id, resident_request)
     if not updated_resident:
         return jsonify({'error': 'Resident not found'}), 404
     return jsonify(updated_resident), 200
 
-@resident_bp.route('/delete/', methods=['DELETE'])
-def delete():
-    token = get_token()
-    is_deleted = service.delete(token)
+@resident_bp.route('/delete/<int:id>', methods=['DELETE'])
+def delete(id: int):
+    is_deleted = service.delete(id)
     if is_deleted:
         return jsonify({'message': 'Resident deleted successfully'}), 200
     else:
         return jsonify({'error': 'Resident not found'}), 404
-
-def get_token():
-    auth_header = request.headers.get('Authorization')
-    token = auth_header.split(' ')[1]
-    return token
