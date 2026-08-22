@@ -11,7 +11,7 @@ class AddressService:
         self.address_repository = address_repository
         self.demand_repository = demand_repository
 
-    def get_states(self):
+    def get_states(self) -> list[str]:
         return State.get_state_codes()
 
     def get_cities_by_state(self, state: str) -> list[dict]:
