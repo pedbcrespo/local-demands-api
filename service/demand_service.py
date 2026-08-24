@@ -32,8 +32,13 @@ class DemandService:
 
     def finish(self, demand_id: int) -> dict | None:
         demand = self.demand_repository.get(demand_id)
+        if demand is None:
+            return None
         if demand.status == Status.FINISHED:
-            return {'message': 'Cant finish demand that are already finished'}
+            finished_response = Demand(None, None, None, None, None)
+            finished_response.status = Status.FINISHED
+            finished_response.created_at = None
+            return finished_response
         isFinished = self.demand_repository.finish(demand_id)
         return demand.to_dict() if isFinished else None
 

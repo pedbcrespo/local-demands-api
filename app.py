@@ -15,7 +15,7 @@ def create_app(config_override=None):
               description='API de demandas locais', doc=f'/{BASE_URL}/docs')
     api.add_namespace(address_ns, path=f'/{BASE_URL}/address')
     api.add_namespace(demand_ns, path=f'/{BASE_URL}/demands')
-    api.add_namespace(resident_ns, path=f'/{BASE_URL}/resident')
+    api.add_namespace(resident_ns, path=f'/{BASE_URL}/residents')
 
     return app
 

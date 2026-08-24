@@ -75,10 +75,10 @@ class DemandFinish(Resource):
     @demand_ns.response(400, 'Demanda não pode ser finalizada', error_model)
     def put(self, demand_id: int):
         """Finaliza a demanda. Ao final do processo, a mesma não pode mais ser alterada"""
-        demand = service.finish(demand_id)
-        if not demand:
+        response = service.finish(demand_id)
+        if not response:
             demand_ns.abort(400, 'Demand could not be finished')
-        return demand
+        return response
 
 
 @demand_ns.route('/<int:demand_id>/delete')

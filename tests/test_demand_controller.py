@@ -155,4 +155,4 @@ def test_finish_demand_finished(client, app):
 
     response = client.put(f"{BASE_URL_DEMANDS}/{TEST_DEMAND_ID}/finish")
     assert response.status_code == 200
-    assert 'message' in response.json 
+    assert response.json['id'] == None 
