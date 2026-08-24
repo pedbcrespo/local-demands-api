@@ -106,7 +106,6 @@ Representa uma demanda registrada por um morador em um endereço.
 
 
 ## Regras de negocio:
-### Moradores
 * [x] Todo morador pode postar uma demanda
 * [x] A demanda, quando criada, tem que ter um morador e um endereço e status inicial de PENDENTE
 * [x] Uma vez marcada como FINALIZADA, não pode ser mais alterada
