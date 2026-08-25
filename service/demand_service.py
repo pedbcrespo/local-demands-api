@@ -17,6 +17,9 @@ class DemandService:
         demands = self.demand_repository.get_all()
         return [demand.to_dict() for demand in demands]
 
+    def get_all_demand_types(self) -> list[str]:
+        return [demant_type.value for demant_type in DemandType]
+
     def create(self, demand_data: DemandRequest) -> dict | None:
         if not self.__verify_existing_resident_and_address(demand_data.resident_id, demand_data.address_id):
             return None
