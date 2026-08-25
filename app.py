@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restx import Api
 from config.db_config import init_db
 from config.const_config import BASE_URL
@@ -8,6 +9,8 @@ def create_app(config_override=None):
     app = Flask(__name__)
     if config_override:
         app.config.update(config_override)
+
+    CORS(app)
 
     init_db(app)
 
