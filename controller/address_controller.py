@@ -31,6 +31,10 @@ message_model = address_ns.model('Message', {
     'message': fields.String,
 })
 
+city_response = address_ns.model('CityResponse', {
+    'state_code': fields.String,
+    'city_name': fields.String
+})
 
 @address_ns.route('/state')
 class StateList(Resource):
@@ -47,7 +51,7 @@ class StateList(Resource):
 @address_ns.route('/state/<state>')
 @address_ns.param('state', 'Sigla do estado, ex: RJ')
 class CityList(Resource):
-    @address_ns.response(200, 'Lista de nomes de cidades do estado informado, ex: ["Juiz de Fora", "Belo Horizonte", ...]')
+    @address_ns.marshal_list_with(city_response, code=200)
     @address_ns.response(400, 'Não foi possível obter as cidades', error_model)
     def get(self, state: str):
         """Lista os nomes das cidades cadastradas para um estado"""
