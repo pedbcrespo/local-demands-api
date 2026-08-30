@@ -13,10 +13,11 @@ demand_request_model = demand_ns.model('DemandRequest', {
     'title': fields.String(required=True, description='Titulo da demanda'),
     'description': fields.String(required=True, description='Descrição da demanda'),
     'type': fields.String(required=True, description='O tipo da demanda, ex: Estrutural, Periodica, Emergencial'),
+    'address_id': fields.Integer(required=True, description='O identificador do endereço'),
     'resident_id': fields.Integer(required=True, description='O identificador do morador'),
 })
 
-demand_address_model = demand_ns.model('DemandAddress', {
+address_model = demand_ns.model('DemandAddress', {
     'id': fields.Integer(readonly=True),
     'street': fields.String,
     'district': fields.String,
@@ -28,7 +29,7 @@ demand_response_model = demand_ns.model('DemandResponse', {
     'id': fields.Integer(readonly=True),
     'title': fields.String,
     'description': fields.String,
-    'address': fields.Nested(demand_address_model),
+    'address': fields.Nested(address_model),
     'resident': fields.String,
     'status': fields.String,
     'type': fields.String,
