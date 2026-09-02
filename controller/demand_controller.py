@@ -5,6 +5,7 @@ from repository.address_repository import AddressRepository
 from repository.resident_repository import ResidentRepository
 from service.demand_service import DemandService
 from model.request.demand_request import DemandRequest
+from model.enums import DemandType
 
 demand_ns = Namespace('demand', description='Operações relacionadas a demandas')
 service = DemandService(DemandRepository(), AddressRepository(), ResidentRepository())
@@ -12,7 +13,11 @@ service = DemandService(DemandRepository(), AddressRepository(), ResidentReposit
 demand_request_model = demand_ns.model('DemandRequest', {
     'title': fields.String(required=True, description='Titulo da demanda'),
     'description': fields.String(required=True, description='Descrição da demanda'),
-    'type': fields.String(required=True, description='O tipo da demanda, ex: Estrutural, Periodica, Emergencial'),
+    'type': fields.String(
+        required=True,
+        description='O tipo da demanda, ex: Estrutural, Periodica, Emergencial',
+        enum=[demand_type.value for demand_type in DemandType],
+    ),
     'address_id': fields.Integer(required=True, description='O identificador do endereço'),
     'resident_id': fields.Integer(required=True, description='O identificador do morador'),
 })
