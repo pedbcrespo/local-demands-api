@@ -2,6 +2,9 @@ from config.db_config import db
 from model.address import Address
 
 class AddressRepository:
+    def get_all(self) -> list[Address]:
+        return Address.query.all()
+
     def get(self, address_id: int) -> Address | None:
         address = db.session.get(Address, address_id)
         return address

@@ -11,6 +11,10 @@ class AddressService:
         self.address_repository = address_repository
         self.demand_repository = demand_repository
 
+    def get_all(self) -> list[dict]:
+        addresses = self.address_repository.get_all()
+        return [address.to_dict() for address in addresses]
+
     def get_states(self) -> list[str]:
         return State.get_state_codes()
 

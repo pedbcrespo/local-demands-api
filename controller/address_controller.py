@@ -35,18 +35,16 @@ city_response = address_ns.model('CityResponse', {
     'state_code': fields.String,
     'city_name': fields.String
 })
-
-@address_ns.route('/state')
-class StateList(Resource):
-    @address_ns.response(200, 'Lista de siglas dos estados, ex: ["AC", "AL", "SP", ...]')
-    @address_ns.response(400, 'Não foi possível obter os estados', error_model)
+@address_ns.route('/address')
+class AddressList(Resource):
+    @address_ns.marshal_list_with(address_response_model, code=200)
+    @address_ns.response(400, 'Não foi possível obter os endereços', error_model)
     def get(self):
-        """Lista as siglas de todos os estados brasileiros"""
-        states = service.get_states()
-        if states is None:
-            address_ns.abort(400, 'Could not get the states')
-        return states, 200
-
+        """Lista todos os endereços cadastrados"""
+        addresses = service.get_all()
+        if addresses is None:
+            address_ns.abort(400, 'Could not get the addresses')
+        return addresses, 200
 
 @address_ns.route('/state/<state>')
 @address_ns.param('state', 'Sigla do estado, ex: RJ')
