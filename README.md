@@ -4,6 +4,7 @@
 Consiste em uma API que registra demandas de determinada localização.
 As demandas podem ser desde problemas estruturais ate simples tarefas corriqueiras que acontecem nas localidades.
 As demandas são registradas por endereço, que geralmente contam com dados detalhados como Rua, Bairro, Cidade e Estado.
+Os moradores podem postar demandas em endereços distintos ao da onde moram.
 
 ## Como rodar a API:
 *   Baixe o projeto
@@ -11,7 +12,7 @@ As demandas são registradas por endereço, que geralmente contam com dados deta
 ```
 python3 -m venv venv
 ```
-
+*	Ative o ambiente virtual
 (linux)
 ```
 source ./venv/bin/activate
