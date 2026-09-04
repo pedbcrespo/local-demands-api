@@ -28,7 +28,7 @@ class AddressRepository:
         if not filters:
             return []
         
-        return [address for address in Address.query.filter(db.or_(*filters)).distinct().all()]
+        return [address for address in Address.query.filter(db.and_(*filters)).distinct().all()]
 
     def create(self, address: Address) -> Address | None:
         db.session.add(address)

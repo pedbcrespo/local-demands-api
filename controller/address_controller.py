@@ -35,7 +35,7 @@ city_response = address_ns.model('CityResponse', {
     'state_code': fields.String,
     'city_name': fields.String
 })
-@address_ns.route('/address')
+@address_ns.route('/all')
 class AddressList(Resource):
     @address_ns.marshal_list_with(address_response_model, code=200)
     @address_ns.response(400, 'Não foi possível obter os endereços', error_model)
