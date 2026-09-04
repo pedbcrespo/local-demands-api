@@ -30,6 +30,14 @@ pip install -r requirements.txt
 python app.py
 ```
 
+## Organização do projeto
+A API esta organizada num modelo semelhante ao utilizado em projetos Spring Boot, ou seja, as implementações estao separadas por pastas sendo elas:
+`config` => pasta voltada a configurações como o banco de dados em uso, assim como estabelecimento de constantes 
+`model` => pasta onde ficam os arquivos de entidade do banco, assim como outras classes voltadas ao armazenamento das informações manipuladas.
+`service` => pasta onde ficam as implementações das regras de negocio do projeto.
+`repository` => pasta onde ficam as querys de manipulação do banco de dados
+`controller` => pasta onde ficam organizadas e disponibilizadas os endpoints para acesso dos processos desenvolvidos.
+
 ## Modelagem das entidades:
 ```mermaid
 erDiagram
