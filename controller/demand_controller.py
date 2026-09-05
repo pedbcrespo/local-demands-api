@@ -104,7 +104,7 @@ class DemandDelete(Resource):
     @demand_ns.response(400, 'Demanda não pode ser deletada', error_model)
     def delete(self, demand_id: int):
         """Deleta uma demanda"""
-        success = service.delete(demand_id)
-        if not success:
-            demand_ns.abort(400, 'Demand could not be deleted')
-        return {'message': 'Demand deleted successfully'}, 200
+        response = service.delete(demand_id)
+        if not response['success']:
+            return response, 400
+        return response, 200

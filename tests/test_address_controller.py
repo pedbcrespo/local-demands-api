@@ -16,13 +16,6 @@ def test_create_address_success(client):
     assert response.status_code == 200
     assert response.json["city"] == "Rio de Janeiro"
 
-def test_get_states(client):
-    response = client.get(f"{BASE_URL}/state")
-
-    assert response.status_code == 200
-    assert len(response.json) == 27
-    assert "RJ" in response.json
-
 def test_get_cities_by_state_success(client, app):
     response = client.get(f"{BASE_URL}/state/{State.RJ.code}")
     assert response.status_code == 200

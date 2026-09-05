@@ -45,12 +45,12 @@ class DemandService:
         isFinished = self.demand_repository.finish(demand_id)
         return demand.to_dict() if isFinished else None
 
-    def delete(self, demand_id: int) -> bool:
+    def delete(self, demand_id: int) -> dict | None:
         demand = self.demand_repository.get(demand_id)
         if demand == None or demand.status == Status.FINISHED:
-            return False
+            return {'success': False, 'message': 'Demand not found or already finished.'}
         self.demand_repository.delete(demand_id)
-        return True
+        return {'success': True, 'message': 'Demand deleted successfully.'}
 
     def __verify_existing_resident_and_address(self, resident_id: int, address_id: int) -> bool:
         existing_resident = self.resident_repository.get(resident_id)
