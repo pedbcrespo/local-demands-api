@@ -34,6 +34,18 @@ python app.py
 python -m flask run --host 0.0.0.0 --port 5000
 ```
 
+### Observação:
+Durante o processo de implementação desse projeto, eu tenho o habito de rodar o projeto usando o comando:
+```
+python app.py
+```
+e o projeto roda normalmente. Porém, ao utilizar o comando:
+```
+flask run --host 0.0.0.0 --port 5000
+```
+notei que o problema de CORS que eu ja havia tratado, volta a aparecer.
+Caso rode pelo comando apresentado e o erro aparecer, sugiro tentar rodar usando o comando alternativa.
+
 ## Organização do projeto
 A API esta organizada num modelo semelhante ao utilizado em projetos Spring Boot, ou seja, as implementações estao separadas por pastas sendo elas:
 *	`config` => pasta voltada a configurações como o banco de dados em uso, assim como estabelecimento de constantes 
