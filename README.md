@@ -29,6 +29,10 @@ pip install -r requirements.txt
 ```
 python app.py
 ```
+(alternativa)
+```
+python -m flask run --host 0.0.0.0 --port 5000
+```
 
 ## Organização do projeto
 A API esta organizada num modelo semelhante ao utilizado em projetos Spring Boot, ou seja, as implementações estao separadas por pastas sendo elas:
@@ -117,5 +121,5 @@ Representa uma demanda registrada por um morador em um endereço.
 ## Regras de negocio:
 * [x] Todo morador pode postar uma demanda
 * [x] A demanda, quando criada, tem que ter um morador e um endereço e status inicial de PENDENTE
-* [x] Uma vez marcada como FINALIZADA, não pode ser mais alterada
+* [x] Uma vez marcada como FINALIZADA, não pode ser mais alterada ou mesmo apagada
 * [x] O registro de endereços é sempre publico
