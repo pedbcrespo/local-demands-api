@@ -34,6 +34,8 @@ python app.py
 python -m flask run --host 0.0.0.0 --port 5000
 ```
 
+Após rodar o projeto, foi implementado um redirect que fará com que o ```http://127.0.0.1:5000``` envie direto para a pagina do Swagger
+
 ### Observação:
 Durante o processo de implementação desse projeto, eu tenho o habito de rodar o projeto usando o comando:
 ```
