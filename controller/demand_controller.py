@@ -90,7 +90,7 @@ class DemandFinish(Resource):
     @demand_ns.marshal_with(demand_response_model, code=200)
     @demand_ns.response(400, 'Demanda não pode ser finalizada', error_model)
     def put(self, demand_id: int):
-        """Finaliza a demanda. Ao final do processo, a mesma não pode mais ser alterada"""
+        """Finaliza a demanda. Ao final do processo, a mesma não pode mais ser alterada ou deletada."""
         response = service.finish(demand_id)
         if not response:
             demand_ns.abort(400, 'Demand could not be finished')
@@ -103,7 +103,7 @@ class DemandDelete(Resource):
     @demand_ns.response(200, 'Demanda deletada com sucesso', message_model)
     @demand_ns.response(400, 'Demanda não pode ser deletada', error_model)
     def delete(self, demand_id: int):
-        """Deleta uma demanda"""
+        """Deleta uma demanda. Somente demandas com status PENDING podem ser deletadas."""
         response = service.delete(demand_id)
         if not response['success']:
             return response, 400
