@@ -6,47 +6,38 @@ As demandas podem ser desde problemas estruturais ate simples tarefas corriqueir
 As demandas são registradas por endereço, que geralmente contam com dados detalhados como Rua, Bairro, Cidade e Estado.
 Os moradores podem postar demandas em endereços distintos ao da onde moram.
 
-## Como rodar a API:
-*   Baixe o projeto
-*   Recomendado criar um ambiente virtual:
-```
-python3 -m venv venv
-```
-*	Ative o ambiente virtual
-(linux)
-```
-source ./venv/bin/activate
-```
-(windows)
-```
-./venv/scripts/activate
-```
-*   Com o ambiente virtual ativado, instale as dependencias:
-```
-pip install -r requirements.txt
-```
-*   Após a instalação, execute o comando:
-```
-python app.py
-```
-(alternativa)
-```
-python -m flask run --host 0.0.0.0 --port 5000
-```
+## Como rodar a API
 
-Após rodar o projeto, foi implementado um redirect que fará com que o ```http://127.0.0.1:5000``` envie direto para a pagina do Swagger
+### Pré-requisitos
+* Python 3.10+
+* Git
 
-### Observação:
-Durante o processo de implementação desse projeto, eu tenho o habito de rodar o projeto usando o comando:
-```
-python app.py
-```
-e o projeto roda normalmente. Porém, ao utilizar o comando:
-```
-flask run --host 0.0.0.0 --port 5000
-```
-notei que o problema de CORS que eu ja havia tratado, volta a aparecer.
-Caso rode pelo comando apresentado e o erro aparecer, sugiro tentar rodar usando o comando alternativa.
+### Passos para execução
+
+1. **Clone o repositório**
+2. **Crie o ambiente virtual**
+	```
+	python3 -m venv venv
+	```
+3. **Ative o ambiente virtual**
+	(linux)
+	```
+	source ./venv/bin/activate
+	```
+	(windows)
+	```
+	./venv/scripts/activate
+	```
+4.	**instale as dependencias**
+	```
+	pip install -r requirements.txt
+	```
+5.	**Rode o projeto**
+	```
+	python app.py
+	```
+
+Após rodar o projeto, ao acessar ```http://127.0.0.1:5000``` um redirect envia para a pagina do Swagger
 
 ## Organização do projeto
 A API esta organizada num modelo semelhante ao utilizado em projetos Spring Boot, ou seja, as implementações estao separadas por pastas sendo elas:
