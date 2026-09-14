@@ -17,7 +17,7 @@ Os moradores podem postar demandas em endereços distintos ao da onde moram.
 1. **Clone o repositório**
 2. **Crie o ambiente virtual**
 	```
-	python3 -m venv venv
+	python -m venv venv
 	```
 3. **Ative o ambiente virtual**
 	(linux)
