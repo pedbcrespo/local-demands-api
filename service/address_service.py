@@ -1,15 +1,16 @@
 
 from model.request import AddressRequest
-from repository import AddressRepository, DemandRepository
+from repository import AddressRepository, DemandRepository, ResidentRepository
 from model import Address
 from model.enums import State
 from pathlib import Path
 import json
 
 class AddressService:
-    def __init__(self, address_repository: AddressRepository, demand_repository: DemandRepository):
+    def __init__(self, address_repository: AddressRepository, demand_repository: DemandRepository, resident_repository: ResidentRepository):
         self.address_repository = address_repository
         self.demand_repository = demand_repository
+        self.resident_repository = resident_repository
 
     def get_all(self) -> list[dict]:
         addresses = self.address_repository.get_all()
@@ -45,19 +46,20 @@ class AddressService:
         saved_address = self.address_repository.create(address)
         return saved_address.to_dict() if saved_address != None else None
 
-    def delete(self, address_id: int) -> bool:
+    def delete(self, address_id: int) -> dict:
         if self.__is_used_address(address_id):
-            return False
+            return {"success": False, "message": "Address is correlated with existing demands or residents and cannot be deleted."}
         is_deleted = self.address_repository.delete(address_id)
-        return is_deleted
+        return {"success": True, "message": "Address deleted successfully."} if is_deleted else {"success": False, "message": "Failed to delete address."}
 
     def __verify_existing_address(self, address: Address) -> Address | None:
         existing_address = self.address_repository.get_by_address(address)
         return existing_address[0] if len(existing_address) > 0 else None
 
     def __is_used_address(self, address_id: int) -> bool:
-        address_list = self.demand_repository.get_by_address_id(address_id)
-        return len(address_list) > 0
+        demand_list = self.demand_repository.get_by_address_id(address_id)
+        resident_list = self.resident_repository.get_by_address_id(address_id)
+        return len(demand_list) > 0 or len(resident_list) > 0
 
     def __read_brazil_cities_json(self):
         FILE_NAME = "brazil_cities.json"

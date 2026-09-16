@@ -3,9 +3,10 @@ from flask_restx import Namespace, Resource, fields
 from model.request.resident_request import ResidentRequest
 from service.resident_service import ResidentService
 from repository.resident_repository import ResidentRepository
+from repository.demand_repository import DemandRepository
 
 resident_ns = Namespace('resident', description='Operações relacionadas aos moradores')
-service = ResidentService(ResidentRepository())
+service = ResidentService(ResidentRepository(), DemandRepository())
 
 resident_request_model = resident_ns.model('ResidentRequest', {
     'full_name': fields.String(required=True, description='Nome completo'),
@@ -90,7 +91,7 @@ class ResidentDelete(Resource):
     @resident_ns.response(400, 'Erro ao deletar morador', error_model)
     def delete(self, id: int):
         """Deleta um morador"""
-        is_deleted = service.delete(id)
-        if not is_deleted:
-            resident_ns.abort(400, 'Could not delete the resident')
-        return {'message': 'Resident deleted successfully'}, 200
+        response = service.delete(id)
+        if not response['success']:
+           return response, 400
+        return response, 200

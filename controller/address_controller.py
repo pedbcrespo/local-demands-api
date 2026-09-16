@@ -1,12 +1,14 @@
+from urllib import response
+
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from model.request import AddressRequest
 from service import AddressService
-from repository import AddressRepository, DemandRepository
+from repository import AddressRepository, DemandRepository, ResidentRepository
 
 address_ns = Namespace('address', description='Operações relacionadas a endereços')
 
-service = AddressService(AddressRepository(), DemandRepository())
+service = AddressService(AddressRepository(), DemandRepository(), ResidentRepository())
 
 address_request_model = address_ns.model('AddressRequest', {
     'street': fields.String(required=True, description='Rua'),
@@ -83,7 +85,7 @@ class AddressDelete(Resource):
     @address_ns.response(400, 'Endereço não pode ser deletado', error_model)
     def delete(self, address_id: int):
         """Deleta um endereço (falha se ainda estiver em uso por alguma demanda/morador)"""
-        is_deleted = service.delete(address_id)
-        if not is_deleted:
-            address_ns.abort(400, 'Address could not be deleted, it is likely still in use.')
-        return {'message': 'Address deleted!'}, 200
+        response = service.delete(address_id)
+        if not response['success']:
+            return response, 400
+        return response, 200

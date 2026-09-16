@@ -12,6 +12,10 @@ class ResidentRepository:
         resident = Resident.query.filter_by(cpf=cpf).first()
         return resident
 
+    def get_by_address_id(self, address_id: int) -> list[Resident]:
+        residents = Resident.query.filter_by(address_id=address_id).all()
+        return residents
+
     def create(self, resident: Resident) -> Resident | None:
         db.session.add(resident)
         db.session.commit()

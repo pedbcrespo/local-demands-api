@@ -1,5 +1,5 @@
 from config.db_config import db
-from model import Address
+from model import Address, Resident
 from model.enums import State 
 
 BASE_URL = "/local-demands/address"
@@ -43,4 +43,32 @@ def test_delete_address(client, app):
     response = client.delete(f"{BASE_URL}/delete/{address_id}")
 
     assert response.status_code == 200
-    assert response.json.get('error') is None
+    assert response.json.get('success')
+
+def test_delete_address_correlated(client, app):
+    with app.app_context():
+            add1 = Address(
+                street="Av. Atlântica",
+                district="Copacabana",
+                city="Rio de Janeiro",
+                state=State.RJ.code
+            )
+            add1.id = 1
+            db.session.add_all([add1])
+            db.session.commit()
+
+            res = Resident(
+                full_name="John Doe",
+                cpf="12345678901",
+                phone="1234567890",
+                address_id=add1.id
+            )
+            res.id = 1
+            db.session.add_all([res])  
+            db.session.commit()
+
+    address_id = 1
+    response = client.delete(f"{BASE_URL}/delete/{address_id}")
+
+    assert response.status_code == 400
+    assert not response.json.get('success')

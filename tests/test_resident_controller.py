@@ -1,5 +1,5 @@
 from config.db_config import db
-from model import Address, Resident
+from model import Address, Resident, Demand
 from model.enums import State 
 
 BASE_URL = "/local-demands/residents"
@@ -118,5 +118,44 @@ def test_delete_resident(client, app):
     response = client.delete(f"{BASE_URL}/delete/{TEST_RESIDENT_ID}")
 
     assert response.status_code == 200
-    assert response.json.get('error') is None
+    assert response.json.get('success')
         
+def test_delete_resident_with_existing_demands(client, app):
+    TEST_CPF = "12345678910"
+    TEST_RESIDENT_ID = 1
+    ADDRESS_ID = 1
+    with app.app_context():
+        address = Address(
+            street="Av. Atlântica",
+            district="Copacabana",
+            city="Rio de Janeiro",
+            state=State.RJ.code
+        )
+        address.id = 1
+        db.session.add_all([address])
+        db.session.commit()
+
+        resident = Resident(
+            full_name="Fulano de Teste",
+            cpf=TEST_CPF,
+            phone="22999999999",
+            address_id=ADDRESS_ID
+        )
+        resident.id = TEST_RESIDENT_ID
+        db.session.add_all([resident])
+        db.session.commit()
+
+        demand = Demand(
+            title="Test Demand",
+            description="This is a test demand.",
+            resident_id=TEST_RESIDENT_ID,
+            address_id=ADDRESS_ID,
+            type="EMERGENCY"
+        )
+        db.session.add_all([demand])
+        db.session.commit()
+
+    response = client.delete(f"{BASE_URL}/delete/{TEST_RESIDENT_ID}")
+
+    assert response.status_code == 400
+    assert not response.json.get('success')

@@ -1,11 +1,13 @@
 from model.request.resident_request import ResidentRequest
 from repository.resident_repository import ResidentRepository
+from repository.demand_repository import DemandRepository
 from model.resident import Resident
 from service.token_service import TokenService
 
 class ResidentService:
-    def __init__(self, resident_repository: ResidentRepository) -> None:
+    def __init__(self, resident_repository: ResidentRepository, demand_repository: DemandRepository) -> None:
         self.resident_repository = resident_repository
+        self.demand_repository = demand_repository
 
     def get_by_cpf(self, cpf: str) -> dict | None:
         resident = self.resident_repository.get_by_cpf(cpf)
@@ -36,10 +38,18 @@ class ResidentService:
         updated_resident = self.resident_repository.update(resident_id, resident)
         return updated_resident.to_dict() if updated_resident else None
 
-    def delete(self, resident_id: int) -> bool:
+    def delete(self, resident_id: int) -> dict:
+        if self.__is_used_resident(resident_id):
+            return {'success': False, 'message': 'Resident is correlated with existing demands and cannot be deleted.'}
         is_deleted = self.resident_repository.delete(resident_id)
-        return is_deleted
+        if not is_deleted:
+            return {'success': False, 'message': 'Could not delete the resident'}
+        return {'success': True, 'message': 'Resident deleted successfully'}
 
     def __verify_existing_resident(self, resident: Resident) -> bool:
         existing_resident = self.resident_repository.get_by_cpf(resident.cpf)
         return existing_resident
+
+    def __is_used_resident(self, resident_id: int) -> bool:
+        demand_list = self.demand_repository.get_by_resident_id(resident_id)
+        return len(demand_list) > 0
