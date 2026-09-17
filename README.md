@@ -9,7 +9,7 @@ Os moradores podem postar demandas em endereços distintos ao da onde moram.
 ## Como rodar a API
 
 ### Pré-requisitos
-* Python 3.10+
+* Python 3.11+
 * Git
 
 ### Passos para execução
