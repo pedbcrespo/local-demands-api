@@ -15,7 +15,7 @@ resident_request_model = resident_ns.model('ResidentRequest', {
     'address_id': fields.Integer(required=True, description='O identificador do endereço do morador'),
 })
 
-resident_address_model = resident_ns.model('ResidentAddress', {
+resident_address_model = resident_ns.model('AddressResponse', {
     'id': fields.Integer(readonly=True),
     'street': fields.String,
     'district': fields.String,
@@ -90,7 +90,7 @@ class ResidentDelete(Resource):
     @resident_ns.response(200, 'Morador deletado com sucesso', message_model)
     @resident_ns.response(400, 'Erro ao deletar morador', error_model)
     def delete(self, id: int):
-        """Deleta um morador"""
+        """Deleta um morador, contanto que não esteja em uso em demandas"""
         response = service.delete(id)
         if not response['success']:
            return response, 400

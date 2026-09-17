@@ -22,7 +22,7 @@ demand_request_model = demand_ns.model('DemandRequest', {
     'resident_id': fields.Integer(required=True, description='O identificador do morador'),
 })
 
-address_model = demand_ns.model('DemandAddress', {
+address_model = demand_ns.model('AddressResponse', {
     'id': fields.Integer(readonly=True),
     'street': fields.String,
     'district': fields.String,
@@ -78,7 +78,7 @@ class DemandType(Resource):
     @demand_ns.response(200, 'Lista de nomes dos tipos de demandas, ex: ["STRUCTURAL", "EMERGENCY", ...]')
     @demand_ns.response(400, 'Não foi possível obter os tipos de demandas', error_model)
     def get(self):
-        """Lista todas as demandas registradas"""
+        """Lista todas os tipos de demandas registradas"""
         demands = service.get_all_demand_types()
         if demands is None:
             demand_ns.abort(400, 'Could not get the demand types')

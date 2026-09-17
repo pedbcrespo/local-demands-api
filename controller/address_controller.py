@@ -84,7 +84,7 @@ class AddressDelete(Resource):
     @address_ns.response(200, 'Endereço deletado com sucesso', message_model)
     @address_ns.response(400, 'Endereço não pode ser deletado', error_model)
     def delete(self, address_id: int):
-        """Deleta um endereço (falha se ainda estiver em uso por alguma demanda/morador)"""
+        """Deleta um endereço, contanto que não esteja em uso em demandas ou moradores"""
         response = service.delete(address_id)
         if not response['success']:
             return response, 400
