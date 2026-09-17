@@ -86,7 +86,7 @@ def test_update_resident(client, app):
         'address_id':1
     }
 
-    response = client.put(f"{BASE_URL}/update/{TEST_RESIDENT_ID}", json=request)
+    response = client.put(f"{BASE_URL}/{TEST_RESIDENT_ID}/update", json=request)
 
     assert response.status_code == 200
     assert response.json.get('phone') is not None and response.json.get('phone') == PHONE_TEST
@@ -115,7 +115,7 @@ def test_delete_resident(client, app):
         db.session.add_all([resident])
         db.session.commit()
 
-    response = client.delete(f"{BASE_URL}/delete/{TEST_RESIDENT_ID}")
+    response = client.delete(f"{BASE_URL}/{TEST_RESIDENT_ID}/delete")
 
     assert response.status_code == 200
     assert response.json.get('success')
@@ -155,7 +155,7 @@ def test_delete_resident_with_existing_demands(client, app):
         db.session.add_all([demand])
         db.session.commit()
 
-    response = client.delete(f"{BASE_URL}/delete/{TEST_RESIDENT_ID}")
+    response = client.delete(f"{BASE_URL}/{TEST_RESIDENT_ID}/delete")
 
     assert response.status_code == 400
     assert not response.json.get('success')

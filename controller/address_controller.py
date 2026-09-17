@@ -78,7 +78,7 @@ class AddressRegister(Resource):
         return address
 
 
-@address_ns.route('/delete/<int:address_id>')
+@address_ns.route('/<int:address_id>/delete')
 @address_ns.param('address_id', 'ID do endereço a ser deletado')
 class AddressDelete(Resource):
     @address_ns.response(200, 'Endereço deletado com sucesso', message_model)

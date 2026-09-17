@@ -68,7 +68,7 @@ class ResidentCreate(Resource):
         return registered_resident
 
 
-@resident_ns.route('/update/<int:id>')
+@resident_ns.route('/<int:id>/update')
 @resident_ns.param('id', 'ID do morador a ser atualizado')
 class ResidentUpdate(Resource):
     @resident_ns.expect(resident_request_model, validate=True)
@@ -84,7 +84,7 @@ class ResidentUpdate(Resource):
         return updated_resident
 
 
-@resident_ns.route('/delete/<int:id>')
+@resident_ns.route('/<int:id>/delete')
 @resident_ns.param('id', 'ID do morador a ser deletado')
 class ResidentDelete(Resource):
     @resident_ns.response(200, 'Morador deletado com sucesso', message_model)

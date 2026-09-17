@@ -40,7 +40,7 @@ def test_delete_address(client, app):
             db.session.commit()
 
     address_id = 1
-    response = client.delete(f"{BASE_URL}/delete/{address_id}")
+    response = client.delete(f"{BASE_URL}/{address_id}/delete")
 
     assert response.status_code == 200
     assert response.json.get('success')
@@ -68,7 +68,7 @@ def test_delete_address_correlated(client, app):
             db.session.commit()
 
     address_id = 1
-    response = client.delete(f"{BASE_URL}/delete/{address_id}")
+    response = client.delete(f"{BASE_URL}/{address_id}/delete")
 
     assert response.status_code == 400
     assert not response.json.get('success')
