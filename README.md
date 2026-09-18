@@ -100,7 +100,7 @@ Representa o morador associado a um endereço.
 | `id` | Integer | Sim | Identificador do morador. |
 | `full_name` | String | Sim | Nome completo do morador. |
 | `cpf` | String | Sim | CPF do morador. |
-| `phone` | String | Sim | Telefone do morador. |
+| `phone` | String | Não | Telefone do morador. |
 | `address_id` | Integer | Sim | Chave estrangeira para `Address`. |
 
 ### Demand
