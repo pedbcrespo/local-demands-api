@@ -39,7 +39,7 @@ def test_create_demand(client, app):
         "type": DemandType.STRUCTURAL.value
     }
 
-    response = client.post(f"{BASE_URL_DEMANDS}", json=demand_request)
+    response = client.post(f"{BASE_URL_DEMANDS}/register", json=demand_request)
     assert response.status_code == 200  
 
 def test_list_demands(client, app):

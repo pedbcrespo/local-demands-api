@@ -66,32 +66,3 @@ class ResidentCreate(Resource):
         if not registered_resident:
             resident_ns.abort(400, 'Could not register resident')
         return registered_resident
-
-
-@resident_ns.route('/<int:id>/update')
-@resident_ns.param('id', 'ID do morador a ser atualizado')
-class ResidentUpdate(Resource):
-    @resident_ns.expect(resident_request_model, validate=True)
-    @resident_ns.marshal_with(resident_response_model, code=200)
-    @resident_ns.response(400, 'Erro ao atualizar morador', error_model)
-    def put(self, id: int):
-        """Atualiza os dados de um morador"""
-        data = request.get_json()
-        resident_request = ResidentRequest.from_dict(data)
-        updated_resident = service.update(id, resident_request)
-        if not updated_resident:
-            resident_ns.abort(400, 'Could not update the resident')
-        return updated_resident
-
-
-@resident_ns.route('/<int:id>/delete')
-@resident_ns.param('id', 'ID do morador a ser deletado')
-class ResidentDelete(Resource):
-    @resident_ns.response(200, 'Morador deletado com sucesso', message_model)
-    @resident_ns.response(400, 'Erro ao deletar morador', error_model)
-    def delete(self, id: int):
-        """Deleta um morador, contanto que não esteja em uso em demandas"""
-        response = service.delete(id)
-        if not response['success']:
-           return response, 400
-        return response, 200

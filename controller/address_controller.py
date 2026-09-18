@@ -37,7 +37,7 @@ city_response = address_ns.model('CityResponse', {
     'state_code': fields.String,
     'city_name': fields.String
 })
-@address_ns.route('/all')
+@address_ns.route('')
 class AddressList(Resource):
     @address_ns.marshal_list_with(address_response_model, code=200)
     @address_ns.response(400, 'Não foi possível obter os endereços', error_model)
@@ -60,7 +60,6 @@ class CityList(Resource):
             address_ns.abort(400, 'Could not get the cities')
         return cities, 200
 
-
 @address_ns.route('/register')
 class AddressRegister(Resource):
     @address_ns.expect(address_request_model, validate=True)
@@ -76,16 +75,3 @@ class AddressRegister(Resource):
         if address is None:
             address_ns.abort(400, 'Could not register address')
         return address
-
-
-@address_ns.route('/<int:address_id>/delete')
-@address_ns.param('address_id', 'ID do endereço a ser deletado')
-class AddressDelete(Resource):
-    @address_ns.response(200, 'Endereço deletado com sucesso', message_model)
-    @address_ns.response(400, 'Endereço não pode ser deletado', error_model)
-    def delete(self, address_id: int):
-        """Deleta um endereço, contanto que não esteja em uso em demandas ou moradores"""
-        response = service.delete(address_id)
-        if not response['success']:
-            return response, 400
-        return response, 200

@@ -61,6 +61,8 @@ class Demand(Resource):
             demand_ns.abort(400, 'Could not get the demands')
         return demands, 200
 
+@demand_ns.route('/register')
+class DemandRegister(Resource):
     @demand_ns.expect(demand_request_model, validate=True)
     @demand_ns.marshal_with(demand_response_model, code=200)
     @demand_ns.response(400, 'Erro ao registrar demanda', error_model)
@@ -72,17 +74,6 @@ class Demand(Resource):
         if not demand:
             demand_ns.abort(400, 'Could not register demand')
         return demand
-
-@demand_ns.route('/types')
-class DemandType(Resource):
-    @demand_ns.response(200, 'Lista de nomes dos tipos de demandas, ex: ["STRUCTURAL", "EMERGENCY", ...]')
-    @demand_ns.response(400, 'Não foi possível obter os tipos de demandas', error_model)
-    def get(self):
-        """Lista todas os tipos de demandas registradas"""
-        demands = service.get_all_demand_types()
-        if demands is None:
-            demand_ns.abort(400, 'Could not get the demand types')
-        return demands, 200
 
 @demand_ns.route('/<int:demand_id>/finish')
 @demand_ns.param('demand_id', 'ID da demanda a ser marcada como finalizada')
